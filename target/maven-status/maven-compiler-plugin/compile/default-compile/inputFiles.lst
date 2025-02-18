@@ -19,3 +19,4 @@
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/repositories/RuleNameRepository.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/repositories/TradeRepository.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/repositories/UserRepository.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/services/BidListService.java
