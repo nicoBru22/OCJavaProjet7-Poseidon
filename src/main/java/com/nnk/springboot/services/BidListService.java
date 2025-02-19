@@ -97,5 +97,17 @@ public class BidListService {
 	    }
 
 	}
+	
+	public void deleteBidList(Integer id) {
+	    logger.info("Entrée dans la méthode deleteBidList() pour l'ID {}", id);
+		try {
+			BidList bidToDelete = getBidById(id);
+			bidListRepository.delete(bidToDelete);
+		} catch (Exception e) {
+			logger.error("Erreur lors de la suppression du Bid.", e);
+			throw new RuntimeException("erreur lors de la suppréssion du Bid : {} " + id);
+		}
+
+	}
 
 }
