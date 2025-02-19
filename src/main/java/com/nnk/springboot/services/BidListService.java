@@ -1,6 +1,7 @@
 package com.nnk.springboot.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +38,27 @@ public class BidListService {
 		}
 	}
 	
+	public BidList getBidById(Integer id) {
+	    logger.info("Entrée dans la méthode getBidById() avec ID : {}", id);
+	    if (id == null) {
+	        logger.error("L'ID fourni est nul.");
+	        throw new IllegalArgumentException("L'ID ne peut pas être nul.");
+	    }
+	    try {
+		    BidList actualBid = bidListRepository.findById(id)
+		            .orElseThrow(() -> {
+		                logger.warn("Aucun BidList trouvé pour l'ID : {}", id);
+		                return new RuntimeException("BidList introuvable avec l'ID : " + id);
+		            });
+		    return actualBid;
+	    } catch (Exception e) {
+			logger.error("Erreur lors de l'ajout d'un nouveau BidList.", e);
+			throw new RuntimeException("Erreur lors de l'ajout d'un nouveau BidList.", e);
+	    }
+	}
+
+
+	
 	public BidList addBid(BidList bid) {
 		logger.info("Entrée dans la méthode addBid().");
 		try {
@@ -54,4 +76,26 @@ public class BidListService {
 		}
 		
 	}
+	
+	public BidList updateBidList(Integer id, BidList bidList) {
+	    logger.info("Entrée dans la méthode updateBidList() pour l'ID {}", id);
+	    try {
+	    	logger.info("Tentative de récupération de bid avec l'id {}", id);
+		    BidList bidToUpdate = getBidById(id);
+
+		    bidToUpdate.setAccount(bidList.getAccount());
+		    bidToUpdate.setType(bidList.getType());
+		    bidToUpdate.setBidQuantity(bidList.getBidQuantity());
+
+		    logger.info("Mise à jour du bid avec ID {}", id);
+		    logger.debug("Nouveau contenu du bid : {}", bidToUpdate);
+
+		    return bidListRepository.save(bidToUpdate);
+	    } catch (Exception e) {
+			logger.error("Erreur lors de la mise à jour du Bid.", e);
+			throw new RuntimeException("Erreur lors de la mise à jour du Bid.", e);
+	    }
+
+	}
+
 }

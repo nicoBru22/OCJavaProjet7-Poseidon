@@ -28,11 +28,10 @@ public class BidListController {
 	private BidListService bidListService;
 
     @GetMapping("/bidList/list")
-    public String home(Model model) throws Exception
-    {
+    public String home(Model model) throws Exception {
     	logger.info("Entrée dans la méthode home du bidController /bidList/list");
-    	//List<BidList> bidList = bidListService.getAllBid();
-    	//model.addAttribute("bidLists", bidList);
+    	List<BidList> bidLists = bidListService.getAllBid();
+    	model.addAttribute("bidLists", bidLists);
         return "bidList/list";
     }
 
@@ -60,6 +59,10 @@ public class BidListController {
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get Bid by Id and to model then show to the form
+        logger.info("Affichage du formulaire de mise à jour pour l'ID {}", id);
+        
+        BidList bidList = bidListService.getBidById(id);
+        model.addAttribute("bidList", bidList);
         return "bidList/update";
     }
 
@@ -67,6 +70,13 @@ public class BidListController {
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
+        if (result.hasErrors()) {
+            logger.warn("Erreurs de validation : {}", result.getAllErrors());
+            model.addAttribute("bid", bidList);
+            return "bidList/update";
+        }
+        
+        bidListService.updateBidList(id, bidList);
         return "redirect:/bidList/list";
     }
 
@@ -75,4 +85,5 @@ public class BidListController {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
         return "redirect:/bidList/list";
     }
+    
 }

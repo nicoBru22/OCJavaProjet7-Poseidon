@@ -17,8 +17,9 @@
 			<a href="/ruleName/list">Rule</a>
 		</div>
 		<div class="col-6 text-right">
-			Logged in user: <b th:inline="text"  class="user"> [[${#httpServletRequest.remoteUser}]] </b>
-			<form th:action="@{/app-logout}" method="POST">
+		<!-- Attention, modification de la ligne ci-dessous car utilisation seulement de springsecurity pour l instant, remettre celle du repo du projet initiale-->
+			<b class="user" th:remove="all"> [[${#httpServletRequest.remoteUser}]] </b>
+			<form th:action="@{/logout}" method="POST">
 				<input type="submit" value="Logout"/>
 			</form>
 		</div>
@@ -42,9 +43,10 @@
 					<td th:text="${bidList.account}"></td>
 					<td th:text="${bidList.type}"></td>
 					<td th:text="${bidList.bidQuantity}"></td>
+					<!-- Ce td pose probleme pour afficher la page. -->
 					<td style="width: 15%" class="text-center">
-						<a th:href="@{/bidList/update/{id}(id=${bidList.id})}">Edit</a>&nbsp;|&nbsp;
-						<a th:href="@{/bidList/delete/{id}(id=${bidList.id})}">Delete</a>
+						<a th:href="@{/bidList/update/{id}(id=${bidList.bidListId})}">Edit</a>&nbsp;|&nbsp;
+						<a th:href="@{/bidList/delete/{id}(id=${bidList.bidListId})}">Delete</a>
 					</td>
 				</tr>
 			</tbody>
