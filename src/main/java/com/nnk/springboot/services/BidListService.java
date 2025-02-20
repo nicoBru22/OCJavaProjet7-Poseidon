@@ -30,7 +30,6 @@ public class BidListService {
 			} else {
 				logger.info("Ce que contient la bidList : {} ", bidList);
 			}
-			logger.info("Je susi là. ");
 			return bidList;
 		} catch (Exception e) {
 			logger.error("Erreur lors de la récupération de la liste de Bid.", e);
@@ -67,14 +66,13 @@ public class BidListService {
 			}
 			logger.info("Appel de la méthode bidListRepository.save()");
 			logger.debug("Le nouveau bid à ajouter est : {} ", bid);
-			bidListRepository.save(bid);
+			BidList savedBidList = bidListRepository.save(bid);
 			logger.info("Le bid a été ajouté avec succès.");
-			return bid;
+			return savedBidList;
 		} catch (Exception e) {
 			logger.error("Erreur lors de l'ajout d'un nouveau BidList.", e);
 			throw new RuntimeException("Erreur lors de l'ajout d'un nouveau BidList.", e);
 		}
-		
 	}
 	
 	public BidList updateBidList(Integer id, BidList bidList) {
@@ -95,19 +93,18 @@ public class BidListService {
 			logger.error("Erreur lors de la mise à jour du Bid.", e);
 			throw new RuntimeException("Erreur lors de la mise à jour du Bid.", e);
 	    }
-
 	}
 	
 	public void deleteBidList(Integer id) {
 	    logger.info("Entrée dans la méthode deleteBidList() pour l'ID {}", id);
 		try {
 			BidList bidToDelete = getBidById(id);
+			logger.debug("Le bid à supprimer : {} ", bidToDelete);
 			bidListRepository.delete(bidToDelete);
 		} catch (Exception e) {
 			logger.error("Erreur lors de la suppression du Bid.", e);
 			throw new RuntimeException("erreur lors de la suppréssion du Bid : {} " + id);
 		}
-
 	}
 
 }

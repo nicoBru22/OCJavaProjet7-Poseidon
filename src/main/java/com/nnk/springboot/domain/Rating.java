@@ -3,6 +3,7 @@ package com.nnk.springboot.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -15,8 +16,19 @@ public class Rating {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;
+	
+	@NotNull
+	@NotBlank
 	String moodysRating;
+	
+	@NotNull
+	@NotBlank
 	String sandPRating;
+	
+	@NotNull
+	@NotBlank
 	String fitchRating;
+	
+	@NotNull
 	Integer orderNumber;
 }

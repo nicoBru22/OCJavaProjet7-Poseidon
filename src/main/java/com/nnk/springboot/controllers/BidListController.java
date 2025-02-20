@@ -50,10 +50,10 @@ public class BidListController {
             logger.warn("Erreurs de validation : {}", result.getAllErrors());
             model.addAttribute("bid", bid);
             return "bidList/add";
-        } else {
-        	bidListService.addBid(bid);
-        	return "bidList/list";
         }
+        	bidListService.addBid(bid);
+        	return "redirect:/bidList/list";
+        
     }
 
     @GetMapping("/bidList/update/{id}")
@@ -83,6 +83,7 @@ public class BidListController {
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
+    	logger.info("Appel du controller /bidList/delete/{id}");
     	bidListService.deleteBidList(id);
         return "redirect:/bidList/list";
     }
