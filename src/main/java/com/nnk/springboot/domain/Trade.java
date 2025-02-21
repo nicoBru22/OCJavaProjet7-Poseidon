@@ -2,6 +2,7 @@ package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -16,9 +17,18 @@ public class Trade {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer tradeId;
+	
+	@NotNull
+	@NotBlank
 	String account;
+	
+	@NotNull
+	@NotBlank
 	String type;
+	
+	@NotNull
 	Double buyQuantity;
+	
 	Double sellQuantity;
 	Double buyPrice;
 	Double sellPrice;

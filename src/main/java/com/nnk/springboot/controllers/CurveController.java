@@ -75,7 +75,6 @@ public class CurveController {
     		curvePointService.updateCurvePoint(id, curvePoint);
             return "redirect:/curvePoint/list";
     	}
-
     }
 
     @GetMapping("/curvePoint/delete/{id}")
