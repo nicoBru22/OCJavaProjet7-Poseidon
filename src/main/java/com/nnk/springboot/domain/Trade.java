@@ -7,7 +7,9 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 
-
+/**
+ * Model de l'entité Trade
+ */
 @Entity
 @Data
 @Table(name = "trade")
