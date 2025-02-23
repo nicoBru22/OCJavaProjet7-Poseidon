@@ -44,7 +44,9 @@ public class TradeService {
     public Trade getTradeById(Integer id) {
         try {
             logger.info("Récupération du trade avec l'ID: {}", id);
-            return tradeRepository.findById(id).orElseThrow();
+            Trade trade = tradeRepository.findById(id).orElseThrow();
+            logger.debug("Le contenu du Trade : {} ", trade);
+            return trade;
         } catch (Exception e) {
             logger.error("Erreur lors de la récupération du trade avec l'ID: {}", id, e);
             throw new RuntimeException("Erreur survenue lors de la récupération du Trade.", e);
