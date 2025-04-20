@@ -28,7 +28,7 @@ public class LoginController {
      * 
      * @return La vue de la page de connexion.
      */
-    @GetMapping("login")
+    @GetMapping("/login")
     public ModelAndView login() {
         logger.info("Accès à la page de connexion.");
         ModelAndView mav = new ModelAndView();
