@@ -28,6 +28,7 @@ public class BidList {
 	private String type;
 	
 	@NotNull
+	@Digits(integer = 10, fraction= 2)
 	private Double bidQuantity;
 	
 	private Double askQuantity;

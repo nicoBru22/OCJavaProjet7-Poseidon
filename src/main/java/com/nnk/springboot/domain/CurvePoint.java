@@ -1,13 +1,11 @@
 package com.nnk.springboot.domain;
 
-import org.hibernate.validator.constraints.Length;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
@@ -20,14 +18,19 @@ public class CurvePoint {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;
+	
+	@NotNull(message="must be not null")
 	Integer curveId;
+	
 	Timestamp asOfDate;
 	
 	@NotNull
-	Double term;
-	
+	@Digits(integer = 10, fraction = 2)
+	BigDecimal term;
+
 	@NotNull
-	Double value;
+	@Digits(integer = 10, fraction = 2)
+	BigDecimal value;
 	
 	Timestamp creationDate;
 }

@@ -55,7 +55,7 @@ public class LoginController {
      * 
      * @return La vue d'erreur avec le message approprié.
      */
-    @GetMapping("error")
+    @GetMapping("/error")
     public ModelAndView error() {
         logger.error("Tentative d'accès non autorisé.");
         ModelAndView mav = new ModelAndView();

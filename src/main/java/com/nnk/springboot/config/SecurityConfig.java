@@ -42,8 +42,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
         		.requestMatchers("/app/login").permitAll()
-                .requestMatchers("/bidList/**").permitAll()
-                .requestMatchers("/curvePoint/**").permitAll()
+        		.requestMatchers("/home").permitAll()
+                .requestMatchers("/bidList/**", "/curvePoint/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/trade/**").hasRole("ADMIN")
                 .requestMatchers("/rating/**").hasRole("ADMIN")
                 .requestMatchers("/ruleName/**").hasRole("ADMIN")
