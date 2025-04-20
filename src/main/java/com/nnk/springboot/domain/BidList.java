@@ -29,6 +29,7 @@ public class BidList {
 	
 	@NotNull
 	private Double bidQuantity;
+	
 	private Double askQuantity;
 	private Double bid;
 	private Double ask;

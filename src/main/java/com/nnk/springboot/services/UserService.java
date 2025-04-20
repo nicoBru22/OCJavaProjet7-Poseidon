@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 
+import Exception.UserExistingException;
+
 @Service
 public class UserService {
 	
@@ -65,16 +67,18 @@ public class UserService {
 	 */
 	public User addUser(User user) {
 		logger.info("Entrée dans la méthode pour ajouter un nouvel utilisateur.");
-		try {
-			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword())); // Mot de passe encodé
-			User newUser = userRepository.save(user);
-			logger.info("Utilisateur sauvegardé avec succès.");
-			logger.info("L'utilisateur sauvegardé : {}", newUser);
-			return newUser;
-		} catch (Exception e) {
-			logger.error("Une erreur est survenue lors de l'ajout d'un nouvel utilisateur.", e);
-	        throw new RuntimeException("Erreur lors de l'ajout du nouvel utilisateur", e);
+		
+		User userExisting = userRepository.findByUsername(user.getUsername());
+		if(userExisting != null) {
+			logger.error("L'utilisateur {} existe déjà en base de donnée.", user.getUsername());
+			throw new UserExistingException("L'utilisateur existe déjà en base de donnée.");
 		}
+		
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		User newUser = userRepository.save(user);
+		logger.info("Utilisateur sauvegardé avec succès.");
+		logger.info("L'utilisateur sauvegardé : {}", newUser);
+		return newUser;
 	}
 	
 	/**
@@ -86,22 +90,23 @@ public class UserService {
 	 */
 	public User updateUser(Integer id, User user) {
 		logger.info("Tentative de mise à jour de l'utilisateur avec l'ID : {}", id);
-		try {
-			// Encoder le mot de passe avant de le mettre à jour
-			String newPassword = bCryptPasswordEncoder.encode(user.getPassword());
-			User userToUpdate = getUserById(id);
-			userToUpdate.setRole(user.getRole());
-			userToUpdate.setUsername(user.getUsername());
-			userToUpdate.setFullname(user.getFullname());
-			userToUpdate.setPassword(newPassword);
-			
-			User userUpdated = userRepository.save(userToUpdate);
-			logger.info("Utilisateur avec l'ID {} mis à jour avec succès.", id);
-			return userUpdated;
-		} catch (Exception e) {
-	        logger.error("Erreur lors de la mise à jour de l'utilisateur avec l'ID {}.", id, e);
-	        throw new RuntimeException("Erreur de mise à jour de l'utilisateur.", e);
-	    }
+		
+		String newPassword = bCryptPasswordEncoder.encode(user.getPassword());
+		User userToUpdate = getUserById(id);
+		userToUpdate.setRole(user.getRole());
+		userToUpdate.setUsername(user.getUsername());
+		userToUpdate.setFullname(user.getFullname());
+		userToUpdate.setPassword(newPassword);
+		
+		User userExisting = userRepository.findByUsername(userToUpdate.getUsername());
+		if (userExisting != null) {
+			logger.info("Un utilisateur existe déjà pour ce Username : {} ", userToUpdate.getUsername());
+			throw new UserExistingException("Un utilisateur existe déjà avec ce Username");
+		}
+		
+		User userUpdated = userRepository.save(userToUpdate);
+		logger.info("Utilisateur avec l'ID {} mis à jour avec succès.", id);
+		return userUpdated;
 	}
 	
 	/**

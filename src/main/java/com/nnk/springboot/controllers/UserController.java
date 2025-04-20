@@ -3,6 +3,8 @@ package com.nnk.springboot.controllers;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
 
+import Exception.UserExistingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,34 +39,30 @@ public class UserController {
         return "user/list";
     }
 
-    /**
-     * Affiche le formulaire d'ajout d'un nouvel utilisateur.
-     * 
-     * @param bid L'utilisateur à ajouter.
-     * @return La vue du formulaire d'ajout d'un utilisateur.
-     */
+
     @GetMapping("/user/add")
     public String addUser(User user) {
         return "user/add";
     }
 
-    /**
-     * Valide les données d'un utilisateur, encode le mot de passe et l'enregistre dans la base de données.
-     * 
-     * @param user L'utilisateur à valider et enregistrer.
-     * @param result Le résultat de la validation des données.
-     * @param model Le modèle pour transmettre les données à la vue.
-     * @return La vue redirigée vers la liste des utilisateurs si la validation réussit, sinon reste sur le formulaire d'ajout.
-     */
+
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {
-        if (!result.hasErrors()) {
-        	userService.addUser(user);
-            return "redirect:/user/list";
+        if (result.hasErrors()) {
+            model.addAttribute("user", user);
+            return "user/add";
         }
-        model.addAttribute("user", user);
-        return "user/add";
+
+        try {
+            userService.addUser(user);
+            return "redirect:/user/list";
+        } catch (UserExistingException e) {
+            model.addAttribute("user", user);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "user/add";
+        }
     }
+
 
     /**
      * Affiche le formulaire pour mettre à jour un utilisateur existant.
@@ -96,8 +94,15 @@ public class UserController {
         	model.addAttribute("user", user);
             return "user/update";
         }
-        userService.updateUser(id, user);
-        return "redirect:/user/list";
+        try {
+            userService.updateUser(id, user);
+            return "redirect:/user/list";
+        } catch (UserExistingException e) {
+        	model.addAttribute("user", user);
+        	model.addAttribute("errorMessage", e.getMessage());
+        	return "user/update";
+        }
+
     }
 
     /**

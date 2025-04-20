@@ -42,15 +42,16 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/bidList/**").permitAll()
-                .requestMatchers("/trade/**").permitAll()
                 .requestMatchers("/curvePoint/**").permitAll()
-                .requestMatchers("/rating/**").permitAll()
-                .requestMatchers("/ruleName/**").permitAll()
-                .requestMatchers("/user/**").permitAll()
+                .requestMatchers("/trade/**").hasRole("ADMIN")
+                .requestMatchers("/rating/**").hasRole("ADMIN")
+                .requestMatchers("/ruleName/**").hasRole("ADMIN")
+                .requestMatchers("/user/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             .formLogin(form -> form
                 .defaultSuccessUrl("/", true)
-                .permitAll());
+                .permitAll())
+            .logout(logout -> logout.logoutSuccessUrl("/login?logout").permitAll());
 
         logger.info("Configuration de la sécurité appliquée avec succès");
 

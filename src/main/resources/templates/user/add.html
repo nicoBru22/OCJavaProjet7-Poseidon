@@ -12,6 +12,10 @@
 	<div class="row">
 		<h2>Add New User</h2>
 	</div>
+	
+	<div th:if="${errorMessage}">
+	    <div th:text="${errorMessage}" style="color: red;"></div>
+	</div>
 
 	<div class="row">
 		<form action="#" th:action="@{/user/validate}" th:object="${user}" method="post" class="form-horizontal" style="width: 100%">
