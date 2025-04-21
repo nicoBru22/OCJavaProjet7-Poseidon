@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -28,8 +29,8 @@ public class BidList {
 	private String type;
 	
 	@NotNull
-	@Digits(integer = 10, fraction= 2)
-	private Double bidQuantity;
+	@Digits(integer = 10, fraction = 2)
+	private BigDecimal bidQuantity;
 	
 	private Double askQuantity;
 	private Double bid;

@@ -48,11 +48,13 @@ public class SecurityConfig {
                 .requestMatchers("/rating/**").hasRole("ADMIN")
                 .requestMatchers("/ruleName/**").hasRole("ADMIN")
                 .requestMatchers("/user/**").hasRole("ADMIN")
+                .requestMatchers("/403").permitAll()
                 .anyRequest().authenticated())
             .formLogin(form -> form.loginPage("/app/login")
                 .defaultSuccessUrl("/", true)
                 .permitAll())
-            .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll());
+            .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll())
+            .exceptionHandling(ex -> ex.accessDeniedPage("/403"));
 
         logger.info("Configuration de la sécurité appliquée avec succès");
 
