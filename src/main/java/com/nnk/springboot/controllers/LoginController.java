@@ -1,5 +1,6 @@
 package com.nnk.springboot.controllers;
 
+import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,15 @@ public class LoginController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("login");
         return mav;
+    }
+    
+    @GetMapping("/signup")
+    public ModelAndView signup() {
+        logger.info("Accès à la page d'ajout d'un nouvel utilisateur pour le développement.");
+    	ModelAndView mav = new ModelAndView();
+    	mav.addObject("user", new User());
+    	mav.setViewName("signup");
+    	return mav;
     }
 
     /**

@@ -24,6 +24,7 @@ public class User {
     
     @Column(unique = true, nullable = false)
     @NotBlank(message = "Username is mandatory")
+    @Pattern(regexp = "^[^\\d]*$", message = "FullName must not contain numbers")
     private String username;
     
     @Column(nullable = false)
@@ -35,6 +36,7 @@ public class User {
     
     @Column(nullable = false)
     @NotBlank(message = "FullName is mandatory")
+    @Pattern(regexp = "^[^\\d]*$", message = "FullName must not contain numbers")
     private String fullname;
     
     @Column(nullable = false)

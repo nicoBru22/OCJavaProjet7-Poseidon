@@ -7,7 +7,12 @@
 	   <h3>Access Denied Exception</h3>
 
 	   <div>
-		    Logged in user: <b th:inline="text" class="user">[[${username}]]</b>
+		    Logged in user: 
+		    <b th:inline="text" class="user">[[${username}]]</b>
+	    	<div>
+		    	<div>Retourner sur la page d'accueil</div>
+		    	<a href="/">Accueil</a>&nbsp;|&nbsp;
+		    </div>
 		    <form th:action="@{/logout}" method="POST">
 		         <input type="submit" value="logout"/>
 		    </form>

@@ -117,4 +117,5 @@ public class UserController {
     	userService.deleteUser(id);
         return "redirect:/user/list";
     }
+
 }

@@ -6,15 +6,23 @@
 	</head>
 	<body>
 		<h3> HOME PAGE </h3>
+
 		<div id="containerHomePage">
-			<div id="blocHomePage">
-				<div class="elementBlocHomePage">Page de connexion :</div>
-				<a class="lienHomePage" href="/app/login">Login</a>
+			<div>
+				<div>Administrer les utilisateurs :</div>
+			    <form th:action="@{/user/list}" method="get">
+    			    <input class="lienHomePage" type="submit" value="Administrer" />
+			    </form>
+
 			</div>
-		     <div id="">Or create one on</div>
-		    <div>
-			    <div class="elementBlocHomePage">Administration des utilisateurs :</div>
-			    <a class="lienHomePage" href="/user/list">User management</a>
+		     <div>Ou</div>
+			<div>
+				<div>Se déconnecter :</div>
+				<div class="col-6 text-right">
+				<form th:action="@{/logout}" method="POST">
+					<input type="submit" value="Logout"/>
+				</form>
+				</div>
 			</div>
 		</div>
 	</body>

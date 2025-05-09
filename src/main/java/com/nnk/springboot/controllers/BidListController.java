@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 
@@ -70,19 +71,21 @@ public class BidListController {
      * @return Redirection vers la liste des BidList si succès, sinon retour au formulaire d'ajout
      */
     @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model) {
+    public String validate(@Valid BidList bid, BindingResult result, RedirectAttributes redirectAttributes) {
         logger.info("Tentative d'ajout d'un nouveau BidList");
 
         if (result.hasErrors()) {
             logger.warn("Erreurs de validation : {}", result.getAllErrors());
-            model.addAttribute("bid", bid);
             return "bidList/add";
         }
 
-        bidListService.addBid(bid);
-        logger.info("BidList ajouté avec succès : {}", bid);
+        BidList savedBid = bidListService.addBid(bid);
+        redirectAttributes.addFlashAttribute("info", "Ce Bid a bien été ajouté avec succès, ID : " + savedBid.getBidListId());
+
         return "redirect:/bidList/list";
     }
+
+
 
     /**
      * Affiche le formulaire de mise à jour d'un BidList.

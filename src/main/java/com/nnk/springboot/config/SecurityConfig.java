@@ -41,19 +41,17 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-        		.requestMatchers("/app/login").permitAll()
-        		.requestMatchers("/home").permitAll()
+        		.requestMatchers("/app/login", "/app/signup", "/user/validate", "/home", "/403", "/cc/**").permitAll()
+                .requestMatchers("/trade/**", "/rating/**", "/ruleName/**", "/user/**").hasRole("ADMIN")
                 .requestMatchers("/bidList/**", "/curvePoint/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/trade/**").hasRole("ADMIN")
-                .requestMatchers("/rating/**").hasRole("ADMIN")
-                .requestMatchers("/ruleName/**").hasRole("ADMIN")
-                .requestMatchers("/user/**").hasRole("ADMIN")
-                .requestMatchers("/403").permitAll()
                 .anyRequest().authenticated())
             .formLogin(form -> form.loginPage("/app/login")
                 .defaultSuccessUrl("/", true)
                 .permitAll())
-            .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll())
+            .logout(logout -> logout
+            		.logoutUrl("/logout")
+            		.logoutSuccessUrl("/app/login?logout")
+            		.permitAll())
             .exceptionHandling(ex -> ex.accessDeniedPage("/403"));
 
         logger.info("Configuration de la sécurité appliquée avec succès");
