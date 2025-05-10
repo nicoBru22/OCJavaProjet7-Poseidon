@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
@@ -21,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
@@ -38,11 +36,6 @@ public class Test_integration_bid {
 	@Autowired
 	private BidListRepository bidListRepository;
 
-	@Test
-	private void get_bidlist_test() {
-		
-	}
-	
 	@Test
 	@Transactional //permet d'annuler l'enregistrement en base de donnée après le test.
 	@WithMockUser(username="user", roles="USER")
@@ -124,15 +117,63 @@ public class Test_integration_bid {
 	    assertThat(savedBidList).isEmpty();  // Vérifie que le BidList a été supprimé
 	}
 
-
-
-
-	
 	@Test
 	@Transactional
 	@WithMockUser(username="user", roles="USER")
-	private void update_bid_test() {
-		
+	public void addAndUpdate_bid_test() throws Exception {
+	    BidList testBidList = new BidList();
+	    testBidList.setAccount("testAccount");
+	    testBidList.setType("testType");
+	    testBidList.setBidQuantity(new BigDecimal("15.20"));
+	    
+	    BidList testBidList2 = new BidList();
+	    testBidList2.setAccount("testAccount2");
+	    testBidList2.setType("testType2");
+	    testBidList2.setBidQuantity(new BigDecimal("30.50"));
+
+	    mockMvc.perform(post("/bidList/validate")
+	            .param("account", testBidList.getAccount())
+	            .param("type", testBidList.getType())
+	            .param("bidQuantity", testBidList.getBidQuantity().toString()))
+	        .andExpect(status().is3xxRedirection())
+	        .andExpect(redirectedUrl("/bidList/list"))
+	        .andExpect(flash().attribute("info", containsString("Ce Bid a bien été ajouté avec succès")));
+
+	    List<BidList> bidListFromDb = bidListRepository.findAll();
+	    Optional<BidList> savedBidList = bidListFromDb.stream()
+	            .filter(b -> b.getAccount().equals(testBidList.getAccount()) &&
+	                        b.getType().equals(testBidList.getType()) &&
+	                        b.getBidQuantity().equals(testBidList.getBidQuantity()))
+	            .findFirst();
+	    
+	    assertThat(savedBidList).isPresent();
+	    Integer bidListIdFromDb = savedBidList.get().getBidListId();
+	    
+	    mockMvc.perform(post("/bidList/update/" + bidListIdFromDb)
+	            .param("account", testBidList2.getAccount())
+	            .param("type", testBidList2.getType())
+	            .param("bidQuantity", testBidList2.getBidQuantity().toString()))
+	        .andExpect(status().is3xxRedirection())
+	        .andExpect(redirectedUrl("/bidList/list"));
+	    
+	    List<BidList> bidListUpdated = bidListRepository.findAll();
+	    Optional<BidList> updatedBidList = bidListUpdated.stream()
+	    		.filter(b -> 
+	    			b.getAccount().equals(testBidList2.getAccount()) && 
+	    			b.getType().equals(testBidList2.getType()) && 
+	    			b.getBidQuantity().equals(testBidList2.getBidQuantity()))
+	    		.findFirst();
+	    
+	    List<BidList> bidListFromDb2 = bidListRepository.findAll();
+	    Optional<BidList> savedBidList2 = bidListFromDb2.stream()
+	            .filter(b -> b.getAccount().equals(testBidList.getAccount()) &&
+	                        b.getType().equals(testBidList.getType()) &&
+	                        b.getBidQuantity().equals(testBidList.getBidQuantity()))
+	            .findFirst();
+	    
+	    assertThat(updatedBidList).isPresent();
+	    assertThat(savedBidList2).isEmpty();
+	
 	}
 	
 	

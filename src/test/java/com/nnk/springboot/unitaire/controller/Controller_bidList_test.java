@@ -29,6 +29,7 @@ import com.nnk.springboot.services.BidListService;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class Controller_bidList_test {
+
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -56,18 +57,6 @@ public class Controller_bidList_test {
 	    mockMvc.perform(get("/bidList/add"))
 	        .andExpect(status().isOk())
 	        .andExpect(view().name("bidList/add"));
-	}
-	
-	@Test
-	@WithMockUser(username="admin", roles="ADMIN")
-	public void test_add_BidList() throws Exception {
-		mockMvc.perform(post("/bidList/validate")
-		        .param("account", "TestAccount")
-		        .param("type", "TestType")
-		        .param("bidQuantity", "123.45")) //bidQuantity valide si 2 chiffres après la virgule
-		    .andExpect(status().is3xxRedirection())
-		    .andExpect(redirectedUrl("/bidList/list"));
-
 	}
 	
 	@Test
