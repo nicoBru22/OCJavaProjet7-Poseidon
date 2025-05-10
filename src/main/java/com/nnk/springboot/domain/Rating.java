@@ -23,7 +23,7 @@ public class Rating {
 	
 	@NotNull
 	@NotBlank
-	String sandPRating;
+	String sandRating;
 	
 	@NotNull
 	@NotBlank

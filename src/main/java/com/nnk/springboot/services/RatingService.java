@@ -101,7 +101,7 @@ public class RatingService {
             ratingToUpdate.setFitchRating(rating.getFitchRating());
             ratingToUpdate.setMoodysRating(rating.getMoodysRating());
             ratingToUpdate.setOrderNumber(rating.getOrderNumber());
-            ratingToUpdate.setSandPRating(rating.getSandPRating());
+            ratingToUpdate.setSandRating(rating.getSandRating());
             
             Rating updatedRating = ratingRepository.save(ratingToUpdate);
             logger.info("Rating mis à jour avec succès : {}", updatedRating);
