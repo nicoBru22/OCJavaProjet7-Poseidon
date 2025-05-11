@@ -89,25 +89,34 @@ public class UserService {
 	 * @return l'utilisateur mis à jour
 	 */
 	public User updateUser(Integer id, User user) {
-		logger.info("Tentative de mise à jour de l'utilisateur avec l'ID : {}", id);
-		
-		String newPassword = bCryptPasswordEncoder.encode(user.getPassword());
-		User userToUpdate = getUserById(id);
-		userToUpdate.setRole(user.getRole());
-		userToUpdate.setUsername(user.getUsername());
-		userToUpdate.setFullname(user.getFullname());
-		userToUpdate.setPassword(newPassword);
-		
-		User userExisting = userRepository.findByUsername(userToUpdate.getUsername());
-		if (userExisting != null) {
-			logger.info("Un utilisateur existe déjà pour ce Username : {} ", userToUpdate.getUsername());
-			throw new UserExistingException("Un utilisateur existe déjà avec ce Username");
-		}
-		
-		User userUpdated = userRepository.save(userToUpdate);
-		logger.info("Utilisateur avec l'ID {} mis à jour avec succès.", id);
-		return userUpdated;
+	    logger.info("Tentative de mise à jour de l'utilisateur avec l'ID : {}", id);
+	    
+	    // Vérifier si un autre utilisateur existe déjà avec ce username avant de commencer la mise à jour
+	    User userExisting = userRepository.findByUsername(user.getUsername());
+	    if (userExisting != null && !userExisting.getId().equals(id)) { // vérifier si l'ID est différent
+	        logger.info("Un utilisateur existe déjà pour ce Username : {} ", user.getUsername());
+	        throw new UserExistingException("Un utilisateur existe déjà avec ce Username");
+	    }
+
+	    // Encoder le nouveau mot de passe
+	    String newPassword = bCryptPasswordEncoder.encode(user.getPassword());
+
+	    // Récupérer l'utilisateur à mettre à jour
+	    User userToUpdate = getUserById(id);
+
+	    // Appliquer les modifications
+	    userToUpdate.setRole(user.getRole());
+	    userToUpdate.setUsername(user.getUsername());
+	    userToUpdate.setFullname(user.getFullname());
+	    userToUpdate.setPassword(newPassword);
+
+	    // Sauvegarder l'utilisateur mis à jour
+	    User userUpdated = userRepository.save(userToUpdate);
+
+	    logger.info("Utilisateur avec l'ID {} mis à jour avec succès.", id);
+	    return userUpdated;
 	}
+
 	
 	/**
 	 * Supprime un utilisateur de la base de données.
