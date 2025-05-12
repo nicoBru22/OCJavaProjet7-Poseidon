@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -147,6 +148,58 @@ public class Test_integration_curvePoint {
 
 	    assertThat(oldCurvePoint).isEmpty(); // ancienne valeur supprimée ou modifiée
 	    assertThat(updatedCurvePoint).isPresent(); // nouvelle valeur présente
+	}
+	
+	@Test
+	@Transactional
+	@WithMockUser(username="user", roles="USER")
+	public void update_error_CurvePoint_Test() throws Exception {
+	    CurvePoint testCurvePoint = new CurvePoint();
+	    testCurvePoint.setTerm(new BigDecimal("10.50"));
+	    testCurvePoint.setValue(new BigDecimal("50"));
+
+	    CurvePoint testCurvePointUpdated = new CurvePoint();
+	    testCurvePointUpdated.setTerm(new BigDecimal("200.555050"));
+	    testCurvePointUpdated.setValue(new BigDecimal("500.91"));
+
+	    mockMvc.perform(post("/curvePoint/validate")
+	            .param("term", testCurvePoint.getTerm().toString())
+	            .param("value", testCurvePoint.getValue().toString()))
+	        .andExpect(status().is3xxRedirection())
+	        .andExpect(redirectedUrl("/curvePoint/list"));
+
+	    List<CurvePoint> curvePointList = curvePointService.getAllCurvePoint();
+	    Optional<CurvePoint> savedCurvePoint = curvePointList.stream()
+	        .filter(c -> c.getTerm().equals(testCurvePoint.getTerm()) &&
+	                     c.getValue().equals(testCurvePoint.getValue()))
+	        .findFirst();
+
+	    assertThat(savedCurvePoint).isPresent();
+
+	    Integer curvePointID = savedCurvePoint.get().getId();
+
+	    mockMvc.perform(post("/curvePoint/update/" + curvePointID)
+	            .param("term", "")
+	            .param("value", testCurvePointUpdated.getValue().toString()))
+	        .andExpect(status().isOk())
+	        .andExpect(view().name("curvePoint/update"));
+
+	}
+	
+	@Test
+	@Transactional
+	@WithMockUser(username="user", roles="USER")
+	public void add_error_CurvePoint_Test() throws Exception {
+		CurvePoint testCurvePoint = new CurvePoint();
+		testCurvePoint.setTerm(new BigDecimal("10.50"));
+		testCurvePoint.setValue(new BigDecimal("50.65"));
+		
+		mockMvc.perform(post("/curvePoint/validate")
+	            .param("term", "")
+	            .param("value", testCurvePoint.getValue().toString()))
+	        .andExpect(status().isOk())
+	        .andExpect(view().name("curvePoint/add"));
+		
 	}
 
 
