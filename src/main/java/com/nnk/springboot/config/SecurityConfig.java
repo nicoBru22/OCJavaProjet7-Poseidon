@@ -41,12 +41,13 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-        		.requestMatchers("/app/login", "/app/signup", "/user/validate", "/home", "/403", "/cc/**").permitAll()
-                .requestMatchers("/trade/**", "/rating/**", "/ruleName/**", "/user/**").hasRole("ADMIN")
-                .requestMatchers("/bidList/**", "/curvePoint/**").hasAnyRole("USER", "ADMIN")
+                    .requestMatchers("/app/login", "/app/signup", "/user/validate", "/home", "/403", "/cc/**").permitAll()
+                    .requestMatchers("/user/home").hasAnyRole("USER", "ADMIN")
+                    .requestMatchers("/admin/**", "/user/**", "/trade/**", "/rating/**", "/ruleName/**").hasRole("ADMIN")
+                    .requestMatchers("/bidList/**", "/curvePoint/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated())
             .formLogin(form -> form.loginPage("/app/login")
-                .defaultSuccessUrl("/", true)
+        		.successHandler(new CustomAuthenticationSuccessHandler())
                 .permitAll())
             .logout(logout -> logout
             		.logoutUrl("/logout")
