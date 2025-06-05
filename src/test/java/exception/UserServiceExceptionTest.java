@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
-import com.nnk.springboot.services.UserService;
+import com.nnk.springboot.services.implService.UserServiceImpl;
 
 import Exception.UserExistingException;
 
@@ -20,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UserServiceExceptionTest {
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Mock
     private UserRepository userRepository;

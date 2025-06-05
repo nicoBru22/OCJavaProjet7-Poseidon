@@ -1,6 +1,12 @@
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/Exception/GlobalHandlerException.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/Exception/UserExistingException.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/Application.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/config/CustomAuthenticationSuccessHandler.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/config/CustomUserDetailService.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/config/SecurityConfig.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/controllers/BidListController.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/controllers/CurveController.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/controllers/ErrorController.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/controllers/HomeController.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/controllers/LoginController.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/controllers/RatingController.java
@@ -20,3 +26,9 @@
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/repositories/TradeRepository.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/repositories/UserRepository.java
 /home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/services/BidListService.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/services/CurvePointService.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/services/CustomUserDetailService.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/services/RatingService.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/services/RuleNameService.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/services/TradeService.java
+/home/nicolas/Documents/OpenClassroom - Java/Projet7-Backend-Sécurité/Poseiden-skeleton/src/main/java/com/nnk/springboot/services/UserService.java

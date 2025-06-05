@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomUserDetailService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.config</a> &gt; <span class="el_source">CustomUserDetailService.java</span></div><h1>CustomUserDetailService.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.config;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.nnk.springboot.domain.User;
+import com.nnk.springboot.repositories.UserRepository;
+
+<span class="nc" id="L19">public class CustomUserDetailService implements UserDetailsService{</span>
+
+	
+<span class="nc" id="L22">	private static final Logger logger = LogManager.getLogger(CustomUserDetailService.class);</span>
+	
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+<span class="nc" id="L29">		logger.info(&quot;Tentative de chargement de l'utilisateur avec le username : {}&quot;, username);</span>
+		
+<span class="nc" id="L31">		User user = userRepository.findByUsername(username);</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">		if(user == null) {</span>
+<span class="nc" id="L33">			logger.error(&quot;Cet utilisateur n'existe ps en base de donnée.&quot;);</span>
+<span class="nc" id="L34">			throw new UsernameNotFoundException(&quot;Utilisateur non trouvé avec le username : &quot; + username);</span>
+		}
+		
+<span class="nc" id="L37">		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),</span>
+<span class="nc" id="L38">				getGrantedAuthorities(user.getRole()));</span>
+	}
+	
+	private List&lt;GrantedAuthority&gt; getGrantedAuthorities(String role) {
+<span class="nc" id="L42">		logger.info(&quot;Assignation des rôles pour l'utilisateur avec le rôle : {}&quot;, role);</span>
+<span class="nc" id="L43">		List&lt;GrantedAuthority&gt; authorities = new ArrayList&lt;&gt;();</span>
+		try {
+<span class="nc" id="L45">			authorities.add(new SimpleGrantedAuthority(&quot;ROLE_&quot; + role));</span>
+<span class="nc" id="L46">		} catch (Exception e) {</span>
+<span class="nc" id="L47">			logger.error(&quot;Erreur lors de l'ajout des rôles pour : {}&quot;, role, e);</span>
+<span class="nc" id="L48">			throw new RuntimeException(&quot;Erreur lors de l'attribution des rôles&quot;, e);</span>
+<span class="nc" id="L49">		}</span>
+<span class="nc" id="L50">		return authorities;</span>
+	}
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

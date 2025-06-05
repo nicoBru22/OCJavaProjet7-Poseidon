@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -21,15 +21,16 @@ public class CurvePoint {
 	
 	Integer curveId;
 	
-	Timestamp asOfDate;
+	LocalDateTime asOfDate;
 	
 	@NotNull
 	@Digits(integer = 10, fraction = 2)
 	BigDecimal term;
 
+	@Column(name = "\"value\"")
 	@NotNull
 	@Digits(integer = 10, fraction = 2)
 	BigDecimal value;
 	
-	Timestamp creationDate;
+	LocalDateTime creationDate;
 }

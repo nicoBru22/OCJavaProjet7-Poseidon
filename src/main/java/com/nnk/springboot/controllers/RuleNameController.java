@@ -1,7 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.RuleName;
-import com.nnk.springboot.services.RuleNameService;
+import com.nnk.springboot.services.IRuleNameService;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class RuleNameController {
     private static final Logger logger = LogManager.getLogger(RuleNameController.class);
 
     @Autowired
-    private RuleNameService ruleNameService;
+    private IRuleNameService ruleNameService;
 
     /**
      * Affiche la liste de tous les noms de règles.

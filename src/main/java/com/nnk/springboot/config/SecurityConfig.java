@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.nnk.springboot.services.CustomUserDetailService;
+import com.nnk.springboot.services.CustomUserDetailServiceImpl;
 
 
 /**
@@ -26,7 +26,7 @@ public class SecurityConfig {
     private Logger logger = LogManager.getLogger(SecurityConfig.class);
 
     @Autowired
-    private CustomUserDetailService customUserDetailService;
+    private CustomUserDetailServiceImpl customUserDetailService;
 
     /**
      * Définit les règles de sécurité des endpoints de l'application.

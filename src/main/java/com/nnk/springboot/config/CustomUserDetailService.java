@@ -16,6 +16,7 @@ import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 
 public class CustomUserDetailService implements UserDetailsService{
+
 	
 	private static final Logger logger = LogManager.getLogger(CustomUserDetailService.class);
 	
@@ -47,5 +48,6 @@ public class CustomUserDetailService implements UserDetailsService{
 		}
 		return authorities;
 	}
+
 
 }

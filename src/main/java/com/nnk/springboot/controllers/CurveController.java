@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.nnk.springboot.domain.CurvePoint;
-import com.nnk.springboot.services.CurvePointService;
+import com.nnk.springboot.services.ICurvePointService;
 
 import jakarta.validation.Valid;
 
@@ -28,7 +28,7 @@ public class CurveController {
     private static final Logger logger = LogManager.getLogger(CurveController.class);
 
     @Autowired
-    private CurvePointService curvePointService;
+    private ICurvePointService curvePointService;
 
     /**
      * Affiche la liste de tous les CurvePoints.

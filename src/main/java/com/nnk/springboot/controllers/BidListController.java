@@ -1,7 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.services.BidListService;
+import com.nnk.springboot.services.IBidListService;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class BidListController {
     private static final Logger logger = LogManager.getLogger(BidListController.class);
 
     @Autowired
-    private BidListService bidListService;
+    private IBidListService bidListService;
 
     /**
      * Affiche la liste des BidList.
@@ -40,14 +40,9 @@ public class BidListController {
     @GetMapping("/bidList/list")
     public String home(Model model) throws Exception {
         logger.info("Entrée dans la méthode home - Récupération de la liste des BidList");
-        try {
             List<BidList> bidLists = bidListService.getAllBid();
             model.addAttribute("bidLists", bidLists);
             return "bidList/list";
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération des BidList", e);
-            throw e;
-        }
     }
 
     /**

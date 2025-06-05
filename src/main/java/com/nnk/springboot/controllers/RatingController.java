@@ -1,7 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.Rating;
-import com.nnk.springboot.services.RatingService;
+import com.nnk.springboot.services.IRatingService;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class RatingController {
     private static final Logger logger = LogManager.getLogger(RatingController.class);
 
     @Autowired
-    private RatingService ratingService;
+    private IRatingService ratingService;
 
     /**
      * Affiche la liste de toutes les évaluations.

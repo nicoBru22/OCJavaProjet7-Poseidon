@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CurveController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.controllers</a> &gt; <span class="el_source">CurveController.java</span></div><h1>CurveController.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.controllers;
+
+
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.nnk.springboot.domain.CurvePoint;
+import com.nnk.springboot.services.CurvePointService;
+
+import jakarta.validation.Valid;
+
+/**
+ * Contrôleur pour gérer les entités CurvePoint.
+ * Cette classe gère les opérations CRUD pour les CurvePoints et interagit avec le service CurvePointService.
+ */
+@Controller
+<span class="fc" id="L26">public class CurveController {</span>
+
+<span class="fc" id="L28">    private static final Logger logger = LogManager.getLogger(CurveController.class);</span>
+
+    @Autowired
+    private CurvePointService curvePointService;
+
+    /**
+     * Affiche la liste de tous les CurvePoints.
+     * 
+     * @param model Le modèle pour ajouter les attributs.
+     * @return Le nom de la vue pour la liste des CurvePoints.
+     */
+    @GetMapping(&quot;/curvePoint/list&quot;)
+    public String home(Model model) {
+        try {
+<span class="fc" id="L42">            logger.info(&quot;Récupération de tous les CurvePoints pour l'affichage de la liste.&quot;);</span>
+<span class="fc" id="L43">            List&lt;CurvePoint&gt; curvePoints = curvePointService.getAllCurvePoint();</span>
+<span class="fc" id="L44">            model.addAttribute(&quot;curvePoints&quot;, curvePoints);</span>
+<span class="fc" id="L45">            logger.info(&quot;Récupération réussie de {} CurvePoints.&quot;, curvePoints.size());</span>
+<span class="fc" id="L46">            return &quot;curvePoint/list&quot;;</span>
+<span class="nc" id="L47">        } catch (Exception e) {</span>
+<span class="nc" id="L48">            logger.error(&quot;Erreur lors de la récupération des CurvePoints pour la liste.&quot;, e);</span>
+<span class="nc" id="L49">            return &quot;error&quot;;</span>
+        }
+    }
+
+    /**
+     * Affiche le formulaire d'ajout d'un nouveau CurvePoint.
+     * 
+     * @param curvePoint Le CurvePoint à ajouter.
+     * @return Le nom de la vue pour ajouter un CurvePoint.
+     */
+    @GetMapping(&quot;/curvePoint/add&quot;)
+    public String addBidForm(CurvePoint curvePoint) {
+<span class="fc" id="L61">        logger.info(&quot;Affichage du formulaire d'ajout de CurvePoint.&quot;);</span>
+<span class="fc" id="L62">        return &quot;curvePoint/add&quot;;</span>
+    }
+
+    /**
+     * Valide et enregistre un nouveau CurvePoint.
+     * 
+     * @param curvePoint Le CurvePoint à valider et enregistrer.
+     * @param result Le résultat de la validation.
+     * @param model Le modèle pour ajouter les attributs.
+     * @return La vue à afficher après la validation.
+     */
+    @PostMapping(&quot;/curvePoint/validate&quot;)
+    public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
+        try {
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            if (result.hasErrors()) {</span>
+<span class="fc" id="L77">                logger.warn(&quot;Des erreurs de validation ont été trouvées pour le CurvePoint.&quot;);</span>
+<span class="fc" id="L78">                model.addAttribute(&quot;curvePoint&quot;, curvePoint);</span>
+<span class="fc" id="L79">                return &quot;curvePoint/add&quot;;</span>
+            } else {
+<span class="fc" id="L81">                curvePointService.addCurvePoint(curvePoint);</span>
+<span class="fc" id="L82">                logger.info(&quot;CurvePoint ajouté avec succès.&quot;);</span>
+<span class="fc" id="L83">                return &quot;redirect:/curvePoint/list&quot;;</span>
+            }
+<span class="nc" id="L85">        } catch (Exception e) {</span>
+<span class="nc" id="L86">            logger.error(&quot;Erreur lors de l'ajout du CurvePoint.&quot;, e);</span>
+<span class="nc" id="L87">            return &quot;error&quot;;</span>
+        }
+    }
+
+    /**
+     * Affiche le formulaire de mise à jour d'un CurvePoint existant.
+     * 
+     * @param id L'ID du CurvePoint à mettre à jour.
+     * @param model Le modèle pour ajouter les attributs.
+     * @return Le nom de la vue pour mettre à jour un CurvePoint.
+     */
+    @GetMapping(&quot;/curvePoint/update/{id}&quot;)
+    public String showUpdateForm(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+        try {
+<span class="fc" id="L101">            logger.info(&quot;Récupération du CurvePoint avec l'ID: {}&quot;, id);</span>
+<span class="fc" id="L102">            CurvePoint curvePoint = curvePointService.getCurvePointById(id);</span>
+<span class="fc" id="L103">            model.addAttribute(&quot;curvePoint&quot;, curvePoint);</span>
+<span class="fc" id="L104">            logger.info(&quot;CurvePoint avec l'ID {} récupéré avec succès.&quot;, id);</span>
+<span class="fc" id="L105">            return &quot;curvePoint/update&quot;;</span>
+<span class="nc" id="L106">        } catch (Exception e) {</span>
+<span class="nc" id="L107">            logger.error(&quot;Erreur lors de la récupération du CurvePoint avec l'ID: {}&quot;, id, e);</span>
+<span class="nc" id="L108">            return &quot;error&quot;;</span>
+        }
+    }
+
+    /**
+     * Met à jour un CurvePoint existant.
+     * 
+     * @param id L'ID du CurvePoint à mettre à jour.
+     * @param curvePoint Le CurvePoint mis à jour.
+     * @param result Le résultat de la validation.
+     * @param model Le modèle pour ajouter les attributs.
+     * @return La vue à afficher après la mise à jour.
+     */
+    @PostMapping(&quot;/curvePoint/update/{id}&quot;)
+    public String updateBid(@PathVariable(&quot;id&quot;) Integer id, @Valid CurvePoint curvePoint,
+                             BindingResult result, Model model) {
+        try {
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (result.hasErrors()) {</span>
+<span class="fc" id="L126">                logger.warn(&quot;Des erreurs de validation ont été trouvées lors de la mise à jour du CurvePoint.&quot;);</span>
+<span class="fc" id="L127">                model.addAttribute(&quot;curvePoint&quot;, curvePoint);</span>
+<span class="fc" id="L128">                return &quot;curvePoint/update&quot;;</span>
+            } else {
+<span class="fc" id="L130">                curvePointService.updateCurvePoint(id, curvePoint);</span>
+<span class="fc" id="L131">                logger.info(&quot;CurvePoint avec l'ID {} mis à jour avec succès.&quot;, id);</span>
+<span class="fc" id="L132">                return &quot;redirect:/curvePoint/list&quot;;</span>
+            }
+<span class="nc" id="L134">        } catch (Exception e) {</span>
+<span class="nc" id="L135">            logger.error(&quot;Erreur lors de la mise à jour du CurvePoint avec l'ID: {}&quot;, id, e);</span>
+<span class="nc" id="L136">            return &quot;error&quot;;</span>
+        }
+    }
+
+    /**
+     * Supprime un CurvePoint par son ID.
+     * 
+     * @param id L'ID du CurvePoint à supprimer.
+     * @param model Le modèle pour ajouter les attributs.
+     * @return La vue à afficher après la suppression.
+     */
+    @GetMapping(&quot;/curvePoint/delete/{id}&quot;)
+    public String deleteBid(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+        try {
+<span class="fc" id="L150">            logger.info(&quot;Suppression du CurvePoint avec l'ID: {}&quot;, id);</span>
+<span class="fc" id="L151">            curvePointService.deleteCurvePoint(id);</span>
+<span class="fc" id="L152">            logger.info(&quot;CurvePoint avec l'ID {} supprimé avec succès.&quot;, id);</span>
+<span class="fc" id="L153">            return &quot;redirect:/curvePoint/list&quot;;</span>
+<span class="nc" id="L154">        } catch (Exception e) {</span>
+<span class="nc" id="L155">            logger.error(&quot;Erreur lors de la suppression du CurvePoint avec l'ID: {}&quot;, id, e);</span>
+<span class="nc" id="L156">            return &quot;error&quot;;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

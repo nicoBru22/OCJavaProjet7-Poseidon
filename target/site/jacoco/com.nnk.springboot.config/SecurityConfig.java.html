@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.config</a> &gt; <span class="el_source">SecurityConfig.java</span></div><h1>SecurityConfig.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.config;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+import com.nnk.springboot.services.CustomUserDetailService;
+
+
+/**
+ * Configuration de la sécurité Spring Security.
+ * Cette classe définit la gestion des utilisateurs et les règles d'accès aux endpoints.
+ */
+@Configuration
+@EnableWebSecurity
+<span class="fc" id="L24">public class SecurityConfig {</span>
+
+<span class="fc" id="L26">    private Logger logger = LogManager.getLogger(SecurityConfig.class);</span>
+
+    @Autowired
+    private CustomUserDetailService customUserDetailService;
+
+    /**
+     * Définit les règles de sécurité des endpoints de l'application.
+     * 
+     * @param http l'objet HttpSecurity utilisé pour configurer la sécurité
+     * @return l'instance SecurityFilterChain configurée
+     * @throws Exception si une erreur survient lors de la configuration
+     */
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+<span class="fc" id="L40">        logger.info(&quot;Configuration des règles de sécurité&quot;);</span>
+
+<span class="fc" id="L42">        http.csrf(csrf -&gt; csrf.disable())</span>
+<span class="fc" id="L43">            .authorizeHttpRequests(auth -&gt; auth</span>
+<span class="fc" id="L44">                    .requestMatchers(&quot;/app/login&quot;, &quot;/app/signup&quot;, &quot;/user/validate&quot;, &quot;/home&quot;, &quot;/403&quot;, &quot;/cc/**&quot;).permitAll()</span>
+<span class="fc" id="L45">                    .requestMatchers(&quot;/user/home&quot;).hasAnyRole(&quot;USER&quot;, &quot;ADMIN&quot;)</span>
+<span class="fc" id="L46">                    .requestMatchers(&quot;/admin/**&quot;, &quot;/user/**&quot;, &quot;/trade/**&quot;, &quot;/rating/**&quot;, &quot;/ruleName/**&quot;).hasRole(&quot;ADMIN&quot;)</span>
+<span class="fc" id="L47">                    .requestMatchers(&quot;/bidList/**&quot;, &quot;/curvePoint/**&quot;).hasAnyRole(&quot;USER&quot;, &quot;ADMIN&quot;)</span>
+<span class="fc" id="L48">                .anyRequest().authenticated())</span>
+<span class="fc" id="L49">            .formLogin(form -&gt; form.loginPage(&quot;/app/login&quot;)</span>
+<span class="fc" id="L50">        		.successHandler(new CustomAuthenticationSuccessHandler())</span>
+<span class="fc" id="L51">                .permitAll())</span>
+<span class="fc" id="L52">            .logout(logout -&gt; logout</span>
+<span class="fc" id="L53">            		.logoutUrl(&quot;/logout&quot;)</span>
+<span class="fc" id="L54">            		.logoutSuccessUrl(&quot;/app/login?logout&quot;)</span>
+<span class="fc" id="L55">            		.permitAll())</span>
+<span class="fc" id="L56">            .exceptionHandling(ex -&gt; ex.accessDeniedPage(&quot;/403&quot;));</span>
+
+<span class="fc" id="L58">        logger.info(&quot;Configuration de la sécurité appliquée avec succès&quot;);</span>
+
+<span class="fc" id="L60">        return http.build();</span>
+    }
+
+    /**
+     * Définit le bean BCryptPasswordEncoder pour encoder les mots de passe.
+     * 
+     * @return une instance de BCryptPasswordEncoder
+     */
+    @Bean
+    BCryptPasswordEncoder passwordEncoder() {
+<span class="fc" id="L70">        logger.debug(&quot;Initialisation du BCryptPasswordEncoder&quot;);</span>
+<span class="fc" id="L71">        return new BCryptPasswordEncoder();</span>
+    }
+
+    /**
+     * Configure le gestionnaire d'authentification avec un encodage des mots de passe et un service de gestion des utilisateurs.
+     * 
+     * @param http l'objet HttpSecurity utilisé pour configurer la sécurité
+     * @param bCryptPasswordEncoder l'encodeur de mot de passe BCrypt
+     * @return une instance d'AuthenticationManager configurée
+     * @throws Exception si une erreur survient lors de la configuration
+     */
+    @Bean
+    AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
+<span class="fc" id="L84">        logger.info(&quot;Configuration du gestionnaire d'authentification&quot;);</span>
+
+<span class="fc" id="L86">        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);</span>
+<span class="fc" id="L87">        authenticationManagerBuilder.userDetailsService(customUserDetailService).passwordEncoder(bCryptPasswordEncoder);</span>
+
+<span class="fc" id="L89">        logger.info(&quot;Gestionnaire d'authentification configuré avec succès&quot;);</span>
+
+<span class="fc" id="L91">        return authenticationManagerBuilder.build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

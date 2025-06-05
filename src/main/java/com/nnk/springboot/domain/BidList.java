@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -35,16 +35,16 @@ public class BidList {
 	private Double bid;
 	private Double ask;
 	private String benchmark;
-	private Timestamp bidListDate;
+	private LocalDateTime bidListDate;
 	private String commentary;
 	private String security;
 	private String status;
 	private String trader;
 	private String book;
 	private String creationName;
-	private Timestamp creationDate;
+	private LocalDateTime creationDate;
 	private String revisionName;
-	private Timestamp revisionDate;
+	private LocalDateTime revisionDate;
 	private String dealName;
 	private String dealType;
 	private String sourceListId;

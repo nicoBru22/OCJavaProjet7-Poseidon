@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.sql.Timestamp;
-
 @Entity
 @Data
 @Table(name = "rulename")

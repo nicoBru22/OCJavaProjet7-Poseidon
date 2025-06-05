@@ -1,7 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.User;
-import com.nnk.springboot.services.UserService;
+import com.nnk.springboot.services.IUserService;
 
 import Exception.UserExistingException;
 
@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 public class UserController {
     
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     /**
      * Affiche la liste de tous les utilisateurs.

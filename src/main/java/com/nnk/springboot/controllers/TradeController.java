@@ -1,7 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.Trade;
-import com.nnk.springboot.services.TradeService;
+import com.nnk.springboot.services.ITradeService;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class TradeController {
     private static final Logger logger = LogManager.getLogger(TradeController.class);
     
     @Autowired
-    private TradeService tradeService;
+    private ITradeService tradeService;
 
     /**
      * Affiche la liste des trades.

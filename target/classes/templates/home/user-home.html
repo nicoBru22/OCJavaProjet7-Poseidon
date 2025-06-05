@@ -8,14 +8,16 @@
 		<h3> HOME PAGE USER</h3>
 
 		<div id="containerHomePage">
-			<div>
-				<div>Administrer les utilisateurs :</div>
-			    <form th:action="@{/user/list}" method="get">
-    			    <input class="lienHomePage" type="submit" value="Administrer" />
-			    </form>
-
+			<div class="row" th:fragment="menu">
+				<div class="col-6">
+					<a href="/bidList/list">Bid List</a>&nbsp;|&nbsp;
+					<a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
+					<a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
+					<a href="/trade/list">Trade</a>&nbsp;|&nbsp;
+					<a href="/ruleName/list">Rule</a>
+				</div>
 			</div>
-		     <div>Ou</div>
+	     	<div>Ou</div>
 			<div>
 				<div>Se déconnecter :</div>
 				<div class="col-6 text-right">

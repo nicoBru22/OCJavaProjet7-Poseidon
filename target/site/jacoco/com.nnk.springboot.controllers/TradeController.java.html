@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TradeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.controllers</a> &gt; <span class="el_source">TradeController.java</span></div><h1>TradeController.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.controllers;
+
+import com.nnk.springboot.domain.Trade;
+import com.nnk.springboot.services.TradeService;
+
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import jakarta.validation.Valid;
+
+
+/**
+ * Contrôleur pour la gestion des trades.
+ * &lt;p&gt;
+ * Ce controlleur permet les opérations CRUD des Trades.
+ * &lt;/p&gt;
+ */
+@Controller
+<span class="fc" id="L28">public class TradeController {</span>
+    
+<span class="fc" id="L30">    private static final Logger logger = LogManager.getLogger(TradeController.class);</span>
+    
+    @Autowired
+    private TradeService tradeService;
+
+    /**
+     * Affiche la liste des trades.
+     * @param model le modèle pour la vue
+     * @return la page de liste des trades
+     */
+    @GetMapping(&quot;/trade/list&quot;)
+    public String home(Model model) {
+<span class="fc" id="L42">        logger.info(&quot;Affichage de la liste des trades.&quot;);</span>
+<span class="fc" id="L43">        List&lt;Trade&gt; trades = tradeService.getAllTrade();</span>
+<span class="fc" id="L44">        model.addAttribute(&quot;trades&quot;, trades);</span>
+<span class="fc" id="L45">        return &quot;trade/list&quot;;</span>
+    }
+
+    /**
+     * Affiche le formulaire d'ajout d'un trade.
+     * @param trade un objet Trade
+     * @return la page d'ajout
+     */
+    @GetMapping(&quot;/trade/add&quot;)
+    public String addUser(Trade trade) {
+<span class="fc" id="L55">        logger.info(&quot;Affichage du formulaire d'ajout de trade.&quot;);</span>
+<span class="fc" id="L56">        return &quot;trade/add&quot;;</span>
+    }
+
+    /**
+     * Valide et ajoute un trade.
+     * @param trade le trade à ajouter
+     * @param result résultat de la validation
+     * @param model le modèle pour la vue
+     * @return redirection vers la liste des trades
+     */
+    @PostMapping(&quot;/trade/validate&quot;)
+    public String validate(@Valid Trade trade, BindingResult result, Model model) {
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (result.hasErrors()) {</span>
+<span class="nc" id="L69">            logger.warn(&quot;Erreur de validation lors de l'ajout du trade.&quot;);</span>
+<span class="nc" id="L70">            model.addAttribute(&quot;trade&quot;, trade);</span>
+<span class="nc" id="L71">            return &quot;trade/add&quot;;</span>
+        } else {
+<span class="fc" id="L73">            logger.info(&quot;Ajout d'un nouveau trade: {}&quot;, trade);</span>
+<span class="fc" id="L74">            tradeService.addTrade(trade);</span>
+<span class="fc" id="L75">            return &quot;redirect:/trade/list&quot;;</span>
+        }
+    }
+
+    /**
+     * Affiche le formulaire de mise à jour d'un trade.
+     * @param id l'identifiant du trade
+     * @param model le modèle pour la vue
+     * @return la page de mise à jour
+     */
+    @GetMapping(&quot;/trade/update/{id}&quot;)
+    public String showUpdateForm(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+<span class="fc" id="L87">        logger.info(&quot;Affichage du formulaire de mise à jour pour le trade avec l'ID: {}&quot;, id);</span>
+<span class="fc" id="L88">        Trade trade = tradeService.getTradeById(id);</span>
+<span class="fc" id="L89">        model.addAttribute(&quot;trade&quot;, trade);</span>
+<span class="fc" id="L90">        return &quot;trade/update&quot;;</span>
+    }
+
+    /**
+     * Met à jour un trade.
+     * @param id l'identifiant du trade
+     * @param trade les nouvelles valeurs du trade
+     * @param result résultat de la validation
+     * @param model le modèle pour la vue
+     * @return redirection vers la liste des trades
+     */
+    @PostMapping(&quot;/trade/update/{id}&quot;)
+    public String updateTrade(@PathVariable(&quot;id&quot;) Integer id, @Valid Trade trade,
+                              BindingResult result, Model model) {
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (result.hasErrors()) {</span>
+<span class="nc" id="L105">            logger.warn(&quot;Erreur de validation lors de la mise à jour du trade avec l'ID: {}&quot;, id);</span>
+<span class="nc" id="L106">            model.addAttribute(&quot;trade&quot;, trade);</span>
+<span class="nc" id="L107">            return &quot;trade/update&quot;;</span>
+        } else {
+<span class="fc" id="L109">            logger.info(&quot;Mise à jour du trade avec l'ID: {}&quot;, id);</span>
+<span class="fc" id="L110">            tradeService.updateTrade(id, trade);</span>
+<span class="fc" id="L111">            return &quot;redirect:/trade/list&quot;;</span>
+        }
+    }
+
+    /**
+     * Supprime un trade.
+     * @param id l'identifiant du trade
+     * @param model le modèle pour la vue
+     * @return redirection vers la liste des trades
+     */
+    @GetMapping(&quot;/trade/delete/{id}&quot;)
+    public String deleteTrade(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+<span class="fc" id="L123">        logger.info(&quot;Suppression du trade avec l'ID: {}&quot;, id);</span>
+<span class="fc" id="L124">        tradeService.deleteTrade(id);</span>
+<span class="fc" id="L125">        return &quot;redirect:/trade/list&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
