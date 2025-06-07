@@ -1,4 +1,4 @@
-package com.nnk.springboot.services;
+package com.nnk.springboot.config;
 
 import java.util.ArrayList;
 import java.util.List;

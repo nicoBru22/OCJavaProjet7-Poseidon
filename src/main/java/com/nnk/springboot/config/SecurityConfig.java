@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.nnk.springboot.services.CustomUserDetailServiceImpl;
-
 
 /**
  * Configuration de la sécurité Spring Security.
@@ -26,7 +24,7 @@ public class SecurityConfig {
     private Logger logger = LogManager.getLogger(SecurityConfig.class);
 
     @Autowired
-    private CustomUserDetailServiceImpl customUserDetailService;
+    private CustomUserDetailServiceImpl customUserDetailServiceImpl;
 
     /**
      * Définit les règles de sécurité des endpoints de l'application.
@@ -42,9 +40,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/app/login", "/app/signup", "/user/validate", "/home", "/403", "/cc/**").permitAll()
-                    .requestMatchers("/user/home").hasAnyRole("USER", "ADMIN")
-                    .requestMatchers("/admin/**", "/user/**", "/trade/**", "/rating/**", "/ruleName/**").hasRole("ADMIN")
-                    .requestMatchers("/bidList/**", "/curvePoint/**").hasAnyRole("USER", "ADMIN")
+                    .requestMatchers("/user/home", "/bidList/**", "/curvePoint/**", "/trade/**", "/rating/**", "/ruleName/**").hasAnyRole("USER", "ADMIN")
+                    .requestMatchers("/admin/**", "/user/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             .formLogin(form -> form.loginPage("/app/login")
         		.successHandler(new CustomAuthenticationSuccessHandler())
@@ -84,7 +81,7 @@ public class SecurityConfig {
         logger.info("Configuration du gestionnaire d'authentification");
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(customUserDetailService).passwordEncoder(bCryptPasswordEncoder);
+        authenticationManagerBuilder.userDetailsService(customUserDetailServiceImpl).passwordEncoder(bCryptPasswordEncoder);
 
         logger.info("Gestionnaire d'authentification configuré avec succès");
 
