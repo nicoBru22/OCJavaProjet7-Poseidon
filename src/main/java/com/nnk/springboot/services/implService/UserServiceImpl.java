@@ -31,15 +31,10 @@ public class UserServiceImpl implements IUserService {
 	 * @return une liste d'objets User
 	 */
 	public List<User> getAllUsers() {
-		try {
-			logger.info("Tentative de récupération de la liste des utilisateurs.");
-			List<User> userList = userRepository.findAll();
-			logger.info("Liste des utilisateurs récupérée avec succès.");
-			return userList;
-		} catch (Exception e) {
-			logger.error("Une erreur est survenue lors de la récupération de la liste des utilisateurs.", e);
-	        throw new RuntimeException("Une erreur est survenue lors de la récupération de la liste des utilisateurs.", e);
-		}
+		logger.info("Tentative de récupération de la liste des utilisateurs.");
+		List<User> userList = userRepository.findAll();
+		logger.info("Liste des utilisateurs récupérée avec succès.");
+		return userList;
 	}
 	
 	/**
@@ -49,15 +44,10 @@ public class UserServiceImpl implements IUserService {
 	 * @return l'objet User correspondant à l'ID
 	 */
 	public User getUserById(Integer id) {
-		try {
-			logger.info("Tentative de récupération de l'utilisateur avec l'ID : {}", id);
-			User user = userRepository.findById(id).orElseThrow();
-			logger.info("Utilisateur avec l'ID {} récupéré avec succès.", id);
-			return user;
-		} catch (Exception e) {
-			logger.error("Une erreur est survenue lors de la récupération du User par son ID {}. {}", id, e);
-	        throw new RuntimeException("Une erreur est survenue lors de la récupération du User par son ID.", e);
-		}
+		logger.info("Tentative de récupération de l'utilisateur avec l'ID : {}", id);
+		User user = userRepository.findById(id).orElseThrow();
+		logger.info("Utilisateur avec l'ID {} récupéré avec succès.", id);
+		return user;
 	}
 	
 	/**
@@ -92,26 +82,21 @@ public class UserServiceImpl implements IUserService {
 	public User updateUser(Integer id, User user) {
 	    logger.info("Tentative de mise à jour de l'utilisateur avec l'ID : {}", id);
 	    
-	    // Vérifier si un autre utilisateur existe déjà avec ce username avant de commencer la mise à jour
 	    User userExisting = userRepository.findByUsername(user.getUsername());
-	    if (userExisting != null && !userExisting.getId().equals(id)) { // vérifier si l'ID est différent
+	    if (userExisting != null && !userExisting.getId().equals(id.longValue())) {
 	        logger.info("Un utilisateur existe déjà pour ce Username : {} ", user.getUsername());
 	        throw new UserExistingException("Un utilisateur existe déjà avec ce Username");
 	    }
 
-	    // Encoder le nouveau mot de passe
 	    String newPassword = bCryptPasswordEncoder.encode(user.getPassword());
 
-	    // Récupérer l'utilisateur à mettre à jour
 	    User userToUpdate = getUserById(id);
 
-	    // Appliquer les modifications
 	    userToUpdate.setRole(user.getRole());
 	    userToUpdate.setUsername(user.getUsername());
 	    userToUpdate.setFullname(user.getFullname());
 	    userToUpdate.setPassword(newPassword);
 
-	    // Sauvegarder l'utilisateur mis à jour
 	    User userUpdated = userRepository.save(userToUpdate);
 
 	    logger.info("Utilisateur avec l'ID {} mis à jour avec succès.", id);
@@ -126,13 +111,8 @@ public class UserServiceImpl implements IUserService {
 	 */
 	public void deleteUser(Integer id) {
 		logger.info("Tentative de suppression de l'utilisateur avec l'ID : {}", id);
-		try {
-			User userToDelete = getUserById(id);
-			userRepository.delete(userToDelete);
-			logger.info("Utilisateur avec l'ID {} supprimé avec succès.", id);
-		} catch (Exception e) {
-			logger.error("Une erreur est survenue lors de la suppression du User avec l'ID {}.", id, e);
-	        throw new RuntimeException("Une erreur est survenue lors de la suppression du User.", e);
-		}
+		User userToDelete = getUserById(id);
+		userRepository.delete(userToDelete);
+		logger.info("Utilisateur avec l'ID {} supprimé avec succès.", id);
 	}
 }
