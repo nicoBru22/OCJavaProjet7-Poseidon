@@ -12,8 +12,8 @@ import com.nnk.springboot.repositories.RuleNameRepository;
 import com.nnk.springboot.services.IRuleNameService;
 
 /**
- * Service class for managing RuleName entities.
- * This class provides CRUD operations for RuleName.
+ * Service pour gérer les entités RuleName.
+ * Cette classe fournit les opérations CRUD pour les objets RuleName.
  */
 @Service
 public class RuleNameServiceImpl implements IRuleNameService {
@@ -24,108 +24,83 @@ public class RuleNameServiceImpl implements IRuleNameService {
     private RuleNameRepository ruleNameRepository;
 
     /**
-     * Retrieves all RuleName entities from the repository.
+     * Récupère tous les RuleName en base de données.
      * 
-     * @return List of all RuleName entities.
-     * @throws RuntimeException if an error occurs while retrieving the RuleNames.
+     * @return Liste de tous les RuleName.
+     * @throws RuntimeException en cas d'erreur lors de la récupération.
      */
     public List<RuleName> getAllRuleName() {
-        try {
-            logger.info("Fetching all RuleNames from the repository.");
-            List<RuleName> ruleNameList = ruleNameRepository.findAll();
-            logger.info("Successfully fetched {} RuleNames.", ruleNameList.size());
-            return ruleNameList;
-        } catch (Exception e) {
-            logger.error("Error retrieving all RuleNames.", e);
-            throw new RuntimeException("Error retrieving the list of all RuleNames.", e);
-        }
+        logger.info("Fetching all RuleNames from the repository.");
+        List<RuleName> ruleNameList = ruleNameRepository.findAll();
+        logger.info("Successfully fetched {} RuleNames.", ruleNameList.size());
+        return ruleNameList;
     }
 
     /**
-     * Retrieves a RuleName entity by its ID.
+     * Récupère un RuleName en fonction de son ID.
      * 
-     * @param id The ID of the RuleName to retrieve.
-     * @return The RuleName entity.
-     * @throws RuntimeException if an error occurs while retrieving the RuleName or if not found.
+     * @param id Identifiant du RuleName à récupérer.
+     * @return Le RuleName correspondant à l'ID.
+     * @throws RuntimeException si le RuleName n'est pas trouvé ou en cas d'erreur.
      */
     public RuleName getRuleNameById(Integer id) {
-        try {
-            logger.info("Fetching RuleName with ID: {}", id);
-            RuleName ruleName = ruleNameRepository.findById(id)
-                    .orElseThrow(() -> {
-                        logger.warn("No RuleName found with ID: {}", id);
-                        return new Exception("RuleName not found with ID: " + id);
-                    });
-            logger.info("Successfully fetched RuleName with ID: {}", id);
-            return ruleName;
-        } catch (Exception e) {
-            logger.error("Error retrieving RuleName by ID: {}", id, e);
-            throw new RuntimeException("Error retrieving RuleName by its ID.", e);
-        }
+        logger.info("Fetching RuleName with ID: {}", id);
+        RuleName ruleName = ruleNameRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("No RuleName found with ID: {}", id);
+                    return new RuntimeException("RuleName not found with ID: " + id);
+                });
+        logger.info("Successfully fetched RuleName with ID: {}", id);
+        return ruleName;
     }
 
     /**
-     * Adds a new RuleName entity to the repository.
+     * Ajoute un nouveau RuleName en base de données.
      * 
-     * @param ruleName The RuleName entity to add.
-     * @return The saved RuleName entity.
-     * @throws RuntimeException if an error occurs while adding the RuleName.
+     * @param ruleName Le RuleName à ajouter.
+     * @return Le RuleName ajouté.
+     * @throws RuntimeException en cas d'erreur lors de l'ajout.
      */
     public RuleName addRuleName(RuleName ruleName) {
-        try {
-            logger.info("Adding new RuleName: {}", ruleName);
-            RuleName savedRuleName = ruleNameRepository.save(ruleName);
-            logger.info("Successfully added new RuleName: {}", savedRuleName);
-            return savedRuleName;
-        } catch (Exception e) {
-            logger.error("Error adding new RuleName.", e);
-            throw new RuntimeException("Error adding RuleName.", e);
-        }
+        logger.info("Adding new RuleName: {}", ruleName);
+        RuleName savedRuleName = ruleNameRepository.save(ruleName);
+        logger.info("Successfully added new RuleName: {}", savedRuleName);
+        return savedRuleName;
     }
 
     /**
-     * Deletes a RuleName entity by its ID.
+     * Supprime un RuleName en fonction de son ID.
      * 
-     * @param id The ID of the RuleName to delete.
-     * @throws RuntimeException if an error occurs while deleting the RuleName.
+     * @param id Identifiant du RuleName à supprimer.
+     * @throws RuntimeException en cas d'erreur lors de la suppression.
      */
     public void deleteRuleName(Integer id) {
-        try {
-            logger.info("Deleting RuleName with ID: {}", id);
-            RuleName ruleNameToDelete = getRuleNameById(id);
-            ruleNameRepository.delete(ruleNameToDelete);
-            logger.info("Successfully deleted RuleName with ID: {}", id);
-        } catch (Exception e) {
-            logger.error("Error deleting RuleName with ID: {}", id, e);
-            throw new RuntimeException("Error deleting RuleName.", e);
-        }
+        logger.info("Deleting RuleName with ID: {}", id);
+        RuleName ruleNameToDelete = getRuleNameById(id);
+        ruleNameRepository.delete(ruleNameToDelete);
+        logger.info("Successfully deleted RuleName with ID: {}", id);
     }
 
     /**
-     * Updates an existing RuleName entity.
+     * Met à jour un RuleName existant.
      * 
-     * @param id The ID of the RuleName to update.
-     * @param ruleName The new RuleName data.
-     * @return The updated RuleName entity.
-     * @throws RuntimeException if an error occurs while updating the RuleName.
+     * @param id Identifiant du RuleName à mettre à jour.
+     * @param ruleName Les nouvelles données du RuleName.
+     * @return Le RuleName mis à jour.
+     * @throws RuntimeException en cas d'erreur lors de la mise à jour.
      */
     public RuleName updateRuleName(Integer id, RuleName ruleName) {
-        try {
-            logger.info("Updating RuleName with ID: {}", id);
-            RuleName ruleNameToUpdate = getRuleNameById(id);
-            ruleNameToUpdate.setDescription(ruleName.getDescription());
-            ruleNameToUpdate.setJson(ruleName.getJson());
-            ruleNameToUpdate.setName(ruleName.getName());
-            ruleNameToUpdate.setSqlPart(ruleName.getSqlPart());
-            ruleNameToUpdate.setSqlStr(ruleName.getSqlStr());
-            ruleNameToUpdate.setTemplate(ruleName.getTemplate());
+        logger.info("Updating RuleName with ID: {}", id);
+        RuleName ruleNameToUpdate = getRuleNameById(id);
+        ruleNameToUpdate.setDescription(ruleName.getDescription());
+        ruleNameToUpdate.setJson(ruleName.getJson());
+        ruleNameToUpdate.setName(ruleName.getName());
+        ruleNameToUpdate.setSqlPart(ruleName.getSqlPart());
+        ruleNameToUpdate.setSqlStr(ruleName.getSqlStr());
+        ruleNameToUpdate.setTemplate(ruleName.getTemplate());
 
-            RuleName updatedRuleName = ruleNameRepository.save(ruleNameToUpdate);
-            logger.info("Successfully updated RuleName with ID: {}", id);
-            return updatedRuleName;
-        } catch (Exception e) {
-            logger.error("Error updating RuleName with ID: {}", id, e);
-            throw new RuntimeException("Error updating RuleName.", e);
-        }
+        RuleName updatedRuleName = ruleNameRepository.save(ruleNameToUpdate);
+        logger.info("Successfully updated RuleName with ID: {}", id);
+        return updatedRuleName;
     }
 }

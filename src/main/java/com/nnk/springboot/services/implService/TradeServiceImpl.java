@@ -27,14 +27,9 @@ public class TradeServiceImpl implements ITradeService {
      * @return liste des trades
      */
     public List<Trade> getAllTrade() {
-        try {
-            logger.info("Récupération de la liste des trades.");
-            List<Trade> tradeList = tradeRepository.findAll();
-            return tradeList;
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération des trades", e);
-            throw new RuntimeException("Erreur survenue lors de la récupération de la liste de Trade.", e);
-        }
+        logger.info("Récupération de la liste des trades.");
+        List<Trade> tradeList = tradeRepository.findAll();
+        return tradeList;
     }
     
     /**
@@ -43,15 +38,10 @@ public class TradeServiceImpl implements ITradeService {
      * @return le trade correspondant
      */
     public Trade getTradeById(Integer id) {
-        try {
-            logger.info("Récupération du trade avec l'ID: {}", id);
-            Trade trade = tradeRepository.findById(id).orElseThrow();
-            logger.debug("Le contenu du Trade : {} ", trade);
-            return trade;
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération du trade avec l'ID: {}", id, e);
-            throw new RuntimeException("Erreur survenue lors de la récupération du Trade.", e);
-        }
+        logger.info("Récupération du trade avec l'ID: {}", id);
+        Trade trade = tradeRepository.findById(id).orElseThrow();
+        logger.debug("Le contenu du Trade : {} ", trade);
+        return trade;
     }
     
     /**
@@ -60,13 +50,8 @@ public class TradeServiceImpl implements ITradeService {
      * @return le trade ajouté
      */
     public Trade addTrade(Trade trade) {
-        try {
-            logger.info("Ajout d'un nouveau trade: {}", trade);
-            return tradeRepository.save(trade);
-        } catch (Exception e) {
-            logger.error("Erreur lors de l'ajout du trade: {}", trade, e);
-            throw new RuntimeException("Erreur survenue lors de l'ajout du Trade.", e);
-        }
+        logger.info("Ajout d'un nouveau trade: {}", trade);
+        return tradeRepository.save(trade);
     }
     
     /**
@@ -76,17 +61,12 @@ public class TradeServiceImpl implements ITradeService {
      * @return le trade mis à jour
      */
     public Trade updateTrade(Integer id, Trade newTrade) {
-        try {
-            logger.info("Mise à jour du trade avec l'ID: {}", id);
-            Trade tradeToUpdate = getTradeById(id);
-            tradeToUpdate.setAccount(newTrade.getAccount());
-            tradeToUpdate.setBuyQuantity(newTrade.getBuyQuantity());
-            tradeToUpdate.setType(newTrade.getType());
-            return tradeRepository.save(tradeToUpdate);
-        } catch (Exception e) {
-            logger.error("Erreur lors de la mise à jour du trade avec l'ID: {}", id, e);
-            throw new RuntimeException("Erreur survenue lors de la mise à jour du Trade.", e);
-        }
+        logger.info("Mise à jour du trade avec l'ID: {}", id);
+        Trade tradeToUpdate = getTradeById(id);
+        tradeToUpdate.setAccount(newTrade.getAccount());
+        tradeToUpdate.setBuyQuantity(newTrade.getBuyQuantity());
+        tradeToUpdate.setType(newTrade.getType());
+        return tradeRepository.save(tradeToUpdate);
     }
     
     /**
@@ -94,13 +74,8 @@ public class TradeServiceImpl implements ITradeService {
      * @param id identifiant du trade
      */
     public void deleteTrade(Integer id) {
-        try {
-            logger.info("Suppression du trade avec l'ID: {}", id);
-            Trade tradeToDelete = getTradeById(id);
-            tradeRepository.delete(tradeToDelete);
-        } catch (Exception e) {
-            logger.error("Erreur lors de la suppression du trade avec l'ID: {}", id, e);
-            throw new RuntimeException("Erreur survenue lors de la suppression du Trade.", e);
-        }
+        logger.info("Suppression du trade avec l'ID: {}", id);
+        Trade tradeToDelete = getTradeById(id);
+        tradeRepository.delete(tradeToDelete);
     }
 }

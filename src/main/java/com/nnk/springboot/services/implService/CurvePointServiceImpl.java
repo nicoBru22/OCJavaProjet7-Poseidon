@@ -34,18 +34,13 @@ public class CurvePointServiceImpl implements ICurvePointService {
      */
     public CurvePoint getCurvePointById(Integer id) {
         logger.info("Entrée dans la méthode getCurvePointById() avec ID : {}", id);
-        try {
-            CurvePoint curvePoint = curvePointRepository.findById(id)
-                    .orElseThrow(() -> {
-                        logger.warn("Aucun CurvePoint trouvé pour l'ID : {}", id);
-                        return new RuntimeException("CurvePoint introuvable avec l'ID : " + id);
-                    });
-            logger.info("CurvePoint récupéré avec succès : {}", curvePoint);
-            return curvePoint;
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération du CurvePoint avec ID : {}", id, e);
-            throw new RuntimeException("Erreur lors de la récupération du CurvePoint par son ID.", e);
-        }
+        CurvePoint curvePoint = curvePointRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("Aucun CurvePoint trouvé pour l'ID : {}", id);
+                    return new RuntimeException("CurvePoint introuvable avec l'ID : " + id);
+                });
+        logger.info("CurvePoint récupéré avec succès : {}", curvePoint);
+        return curvePoint;
     }
 
     /**
@@ -56,14 +51,9 @@ public class CurvePointServiceImpl implements ICurvePointService {
      */
     public List<CurvePoint> getAllCurvePoint() {
         logger.info("Entrée dans la méthode getAllCurvePoint().");
-        try {
-            List<CurvePoint> curvePointList = curvePointRepository.findAll();
-            logger.info("Nombre de CurvePoints récupérés : {}", curvePointList.size());
-            return curvePointList;
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération de la liste des CurvePoints.", e);
-            throw new RuntimeException("Erreur lors de la récupération de la liste des CurvePoints.", e);
-        }
+        List<CurvePoint> curvePointList = curvePointRepository.findAll();
+        logger.info("Nombre de CurvePoints récupérés : {}", curvePointList.size());
+        return curvePointList;
     }
 
     /**
@@ -75,15 +65,10 @@ public class CurvePointServiceImpl implements ICurvePointService {
      */
     public CurvePoint addCurvePoint(CurvePoint curvePoint) {
         logger.info("Entrée dans la méthode addCurvePoint().");
-        try {
-            logger.debug("CurvePoint à ajouter : {}", curvePoint);
-            CurvePoint savedCurvePoint = curvePointRepository.save(curvePoint);
-            logger.info("CurvePoint ajouté avec succès : {}", savedCurvePoint);
-            return savedCurvePoint;
-        } catch (Exception e) {
-            logger.error("Erreur lors de l'ajout du CurvePoint.", e);
-            throw new RuntimeException("Erreur lors de l'ajout du CurvePoint.", e);
-        }
+        logger.debug("CurvePoint à ajouter : {}", curvePoint);
+        CurvePoint savedCurvePoint = curvePointRepository.save(curvePoint);
+        logger.info("CurvePoint ajouté avec succès : {}", savedCurvePoint);
+        return savedCurvePoint;
     }
 
     /**
@@ -96,19 +81,14 @@ public class CurvePointServiceImpl implements ICurvePointService {
      */
     public CurvePoint updateCurvePoint(Integer id, CurvePoint curvePoint) {
         logger.info("Entrée dans la méthode updateCurvePoint() pour l'ID {}", id);
-        try {
-            CurvePoint curvePointToUpdate = getCurvePointById(id);
-            curvePointToUpdate.setTerm(curvePoint.getTerm());
-            curvePointToUpdate.setValue(curvePoint.getValue());
+        CurvePoint curvePointToUpdate = getCurvePointById(id);
+        curvePointToUpdate.setTerm(curvePoint.getTerm());
+        curvePointToUpdate.setValue(curvePoint.getValue());
 
-            logger.debug("Mise à jour du CurvePoint avec ID {} : {}", id, curvePointToUpdate);
-            CurvePoint updatedCurvePoint = curvePointRepository.save(curvePointToUpdate);
-            logger.info("CurvePoint mis à jour avec succès.");
-            return updatedCurvePoint;
-        } catch (Exception e) {
-            logger.error("Erreur lors de la mise à jour du CurvePoint avec ID {}", id, e);
-            throw new RuntimeException("Erreur lors de la modification du CurvePoint.", e);
-        }
+        logger.debug("Mise à jour du CurvePoint avec ID {} : {}", id, curvePointToUpdate);
+        CurvePoint updatedCurvePoint = curvePointRepository.save(curvePointToUpdate);
+        logger.info("CurvePoint mis à jour avec succès.");
+        return updatedCurvePoint;
     }
 
     /**
@@ -119,15 +99,10 @@ public class CurvePointServiceImpl implements ICurvePointService {
      */
     public void deleteCurvePoint(Integer id) {
         logger.info("Entrée dans la méthode deleteCurvePoint() pour l'ID {}", id);
-        try {
-            CurvePoint curvePointToDelete = getCurvePointById(id);
-            logger.debug("CurvePoint à supprimer : {}", curvePointToDelete);
-            curvePointRepository.delete(curvePointToDelete);
-            logger.info("CurvePoint supprimé avec succès.");
-        } catch (Exception e) {
-            logger.error("Erreur lors de la suppression du CurvePoint avec ID {}", id, e);
-            throw new RuntimeException("Erreur lors de la suppression du CurvePoint : " + id, e);
-        }
+        CurvePoint curvePointToDelete = getCurvePointById(id);
+        logger.debug("CurvePoint à supprimer : {}", curvePointToDelete);
+        curvePointRepository.delete(curvePointToDelete);
+        logger.info("CurvePoint supprimé avec succès.");
     }
 }
 
