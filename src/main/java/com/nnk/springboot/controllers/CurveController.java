@@ -38,16 +38,11 @@ public class CurveController {
      */
     @GetMapping("/curvePoint/list")
     public String home(Model model) {
-        try {
-            logger.info("Récupération de tous les CurvePoints pour l'affichage de la liste.");
-            List<CurvePoint> curvePoints = curvePointService.getAllCurvePoint();
-            model.addAttribute("curvePoints", curvePoints);
-            logger.info("Récupération réussie de {} CurvePoints.", curvePoints.size());
-            return "curvePoint/list";
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération des CurvePoints pour la liste.", e);
-            return "error";
-        }
+        logger.info("Récupération de tous les CurvePoints pour l'affichage de la liste.");
+        List<CurvePoint> curvePoints = curvePointService.getAllCurvePoint();
+        model.addAttribute("curvePoints", curvePoints);
+        logger.info("Récupération réussie de {} CurvePoints.", curvePoints.size());
+        return "curvePoint/list";
     }
 
     /**
@@ -72,19 +67,14 @@ public class CurveController {
      */
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        try {
-            if (result.hasErrors()) {
-                logger.warn("Des erreurs de validation ont été trouvées pour le CurvePoint.");
-                model.addAttribute("curvePoint", curvePoint);
-                return "curvePoint/add";
-            } else {
-                curvePointService.addCurvePoint(curvePoint);
-                logger.info("CurvePoint ajouté avec succès.");
-                return "redirect:/curvePoint/list";
-            }
-        } catch (Exception e) {
-            logger.error("Erreur lors de l'ajout du CurvePoint.", e);
-            return "error";
+        if (result.hasErrors()) {
+            logger.warn("Des erreurs de validation ont été trouvées pour le CurvePoint.");
+            model.addAttribute("curvePoint", curvePoint);
+            return "curvePoint/add";
+        } else {
+            curvePointService.addCurvePoint(curvePoint);
+            logger.info("CurvePoint ajouté avec succès.");
+            return "redirect:/curvePoint/list";
         }
     }
 
@@ -97,16 +87,11 @@ public class CurveController {
      */
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        try {
-            logger.info("Récupération du CurvePoint avec l'ID: {}", id);
-            CurvePoint curvePoint = curvePointService.getCurvePointById(id);
-            model.addAttribute("curvePoint", curvePoint);
-            logger.info("CurvePoint avec l'ID {} récupéré avec succès.", id);
-            return "curvePoint/update";
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération du CurvePoint avec l'ID: {}", id, e);
-            return "error";
-        }
+        logger.info("Récupération du CurvePoint avec l'ID: {}", id);
+        CurvePoint curvePoint = curvePointService.getCurvePointById(id);
+        model.addAttribute("curvePoint", curvePoint);
+        logger.info("CurvePoint avec l'ID {} récupéré avec succès.", id);
+        return "curvePoint/update";
     }
 
     /**
@@ -121,19 +106,14 @@ public class CurveController {
     @PostMapping("/curvePoint/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
-        try {
-            if (result.hasErrors()) {
-                logger.warn("Des erreurs de validation ont été trouvées lors de la mise à jour du CurvePoint.");
-                model.addAttribute("curvePoint", curvePoint);
-                return "curvePoint/update";
-            } else {
-                curvePointService.updateCurvePoint(id, curvePoint);
-                logger.info("CurvePoint avec l'ID {} mis à jour avec succès.", id);
-                return "redirect:/curvePoint/list";
-            }
-        } catch (Exception e) {
-            logger.error("Erreur lors de la mise à jour du CurvePoint avec l'ID: {}", id, e);
-            return "error";
+        if (result.hasErrors()) {
+            logger.warn("Des erreurs de validation ont été trouvées lors de la mise à jour du CurvePoint.");
+            model.addAttribute("curvePoint", curvePoint);
+            return "curvePoint/update";
+        } else {
+            curvePointService.updateCurvePoint(id, curvePoint);
+            logger.info("CurvePoint avec l'ID {} mis à jour avec succès.", id);
+            return "redirect:/curvePoint/list";
         }
     }
 
@@ -146,14 +126,9 @@ public class CurveController {
      */
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        try {
-            logger.info("Suppression du CurvePoint avec l'ID: {}", id);
-            curvePointService.deleteCurvePoint(id);
-            logger.info("CurvePoint avec l'ID {} supprimé avec succès.", id);
-            return "redirect:/curvePoint/list";
-        } catch (Exception e) {
-            logger.error("Erreur lors de la suppression du CurvePoint avec l'ID: {}", id, e);
-            return "error";
-        }
+        logger.info("Suppression du CurvePoint avec l'ID: {}", id);
+        curvePointService.deleteCurvePoint(id);
+        logger.info("CurvePoint avec l'ID {} supprimé avec succès.", id);
+        return "redirect:/curvePoint/list";
     }
 }

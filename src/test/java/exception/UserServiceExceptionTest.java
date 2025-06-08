@@ -12,12 +12,10 @@ import com.nnk.springboot.services.implService.UserServiceImpl;
 import Exception.UserExistingException;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@Disabled
 public class UserServiceExceptionTest {
 
     @InjectMocks
@@ -43,7 +41,7 @@ public class UserServiceExceptionTest {
             userService.getAllUsers();
         });
 
-        assertTrue(thrown.getMessage().contains("récupération de la liste"));
+        assertTrue(thrown.getMessage().contains("Erreur BDD"));
     }
 
     // Test getUserById : exception simulée
@@ -55,7 +53,7 @@ public class UserServiceExceptionTest {
             userService.getUserById(1);
         });
 
-        assertTrue(thrown.getMessage().contains("récupération du User"));
+        assertTrue(thrown.getMessage().contains("Erreur BDD"));
     }
 
     // Test addUser : utilisateur existant

@@ -1,6 +1,7 @@
 package com.nnk.springboot.unitaire.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -44,6 +45,27 @@ public class HomeControllerTest {
 			.andExpect(view().name("403"));
 	}
 	
-	
-	
+	@Test
+	@WithMockUser(username = "admin", roles = {"ADMIN"})
+	public void defaultHomeRedirect_withAdminRole_shouldRedirectToAdminHome() throws Exception {
+	    mockMvc.perform(get("/"))
+	        .andExpect(status().is3xxRedirection())
+	        .andExpect(view().name("redirect:/admin/home"));
+	}
+
+	@Test
+	@WithMockUser(username = "user", roles = {"USER"})
+	public void defaultHomeRedirect_withUserRole_shouldRedirectToUserHome() throws Exception {
+	    mockMvc.perform(get("/"))
+	        .andExpect(status().is3xxRedirection())
+	        .andExpect(view().name("redirect:/user/home"));
+	}
+
+	@Test
+	public void defaultHomeRedirect_withoutAuth_shouldRedirectToLogin() throws Exception {
+	    mockMvc.perform(get("/"))
+	        .andExpect(status().is3xxRedirection())
+	        .andExpect(redirectedUrlPattern("**/login"));
+	}
+
 }
