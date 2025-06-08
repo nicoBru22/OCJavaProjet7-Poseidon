@@ -8,7 +8,12 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * Model de l'entité Trade
+ * Entité représentant un trade dans la table {@code trade}.
+ * <p>
+ * Cette classe mappe les colonnes de la table {@code TRADE} vers des champs Java.
+ * Elle contient les informations relatives à une transaction financière,
+ * telles que les quantités, prix, dates et autres détails.
+ * </p>
  */
 @Entity
 @Data

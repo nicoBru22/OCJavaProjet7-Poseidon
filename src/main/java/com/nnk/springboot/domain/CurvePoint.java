@@ -8,7 +8,14 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
+/**
+ * Entité représentant une entrée de la table {@code curvepoint}.
+ * <p>
+ * Cette classe mappe les colonnes de la table {@code CURVEPOINT} en base de données
+ * vers des champs Java. Elle est utilisée pour stocker et manipuler les données
+ * relatives aux courbes (CurvePoint) dans l'application.
+ * </p>
+ */
 @Entity
 @Data
 @Table(name = "curvepoint")

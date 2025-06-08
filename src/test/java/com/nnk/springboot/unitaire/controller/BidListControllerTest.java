@@ -120,7 +120,7 @@ public class BidListControllerTest {
 	            .param("bidQuantity", "10.00"))
 	        .andExpect(status().isOk())
 	        .andExpect(view().name("bidList/update"))
-	        .andExpect(model().attributeExists("bid"));
+	        .andExpect(model().attributeExists("bidList"));
 	}	
 	
 	@Test

@@ -9,6 +9,14 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Entité représentant une entrée de la table {@code bidlist}.
+ * <p>
+ * Cette classe mappe les colonnes de la table {@code BIDLIST} en base de données
+ * vers des champs Java. Elle est utilisée pour stocker et manipuler les données
+ * relatives aux offres (bids) dans l'application.
+ * </p>
+ */
 @Entity
 @Data
 @Table(name = "bidlist")

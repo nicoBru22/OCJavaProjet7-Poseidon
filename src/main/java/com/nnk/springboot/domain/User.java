@@ -9,7 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+/**
+ * Entité représentant un utilisateur dans la table {@code users}.
+ * <p>
+ * Cette classe mappe les colonnes de la table {@code users} vers des champs Java.
+ * Elle contient les informations nécessaires à l'authentification et la gestion des rôles.
+ * </p>
+ */
 @Entity
 @Getter
 @Setter
