@@ -43,13 +43,14 @@ public class SecurityConfig {
                     .requestMatchers("/user/home", "/bidList/**", "/curvePoint/**", "/trade/**", "/rating/**", "/ruleName/**").hasAnyRole("USER", "ADMIN")
                     .requestMatchers("/admin/**", "/user/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
-            .formLogin(form -> form.loginPage("/app/login")
+            .formLogin(form -> form
+        		.loginPage("/app/login")
         		.successHandler(new CustomAuthenticationSuccessHandler())
                 .permitAll())
             .logout(logout -> logout
-            		.logoutUrl("/logout")
-            		.logoutSuccessUrl("/app/login?logout")
-            		.permitAll())
+        		.logoutUrl("/logout")
+        		.logoutSuccessUrl("/app/login?logout")
+        		.permitAll())
             .exceptionHandling(ex -> ex.accessDeniedPage("/403"));
 
         logger.info("Configuration de la sécurité appliquée avec succès");
