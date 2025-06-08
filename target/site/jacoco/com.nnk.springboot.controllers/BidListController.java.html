@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BidListController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.controllers</a> &gt; <span class="el_source">BidListController.java</span></div><h1>BidListController.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.services.BidListService;
+import com.nnk.springboot.services.IBidListService;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 <span class="fc" id="L28">    private static final Logger logger = LogManager.getLogger(BidListController.class);</span>
 
     @Autowired
-    private BidListService bidListService;
+    private IBidListService bidListService;
 
     /**
      * Affiche la liste des BidList.
@@ -40,14 +40,9 @@ import jakarta.validation.Valid;
     @GetMapping(&quot;/bidList/list&quot;)
     public String home(Model model) throws Exception {
 <span class="fc" id="L42">        logger.info(&quot;Entrée dans la méthode home - Récupération de la liste des BidList&quot;);</span>
-        try {
-<span class="fc" id="L44">            List&lt;BidList&gt; bidLists = bidListService.getAllBid();</span>
-<span class="fc" id="L45">            model.addAttribute(&quot;bidLists&quot;, bidLists);</span>
-<span class="fc" id="L46">            return &quot;bidList/list&quot;;</span>
-<span class="nc" id="L47">        } catch (Exception e) {</span>
-<span class="nc" id="L48">            logger.error(&quot;Erreur lors de la récupération des BidList&quot;, e);</span>
-<span class="nc" id="L49">            throw e;</span>
-        }
+<span class="fc" id="L43">            List&lt;BidList&gt; bidLists = bidListService.getAllBid();</span>
+<span class="fc" id="L44">            model.addAttribute(&quot;bidLists&quot;, bidLists);</span>
+<span class="fc" id="L45">            return &quot;bidList/list&quot;;</span>
     }
 
     /**
@@ -58,8 +53,8 @@ import jakarta.validation.Valid;
      */
     @GetMapping(&quot;/bidList/add&quot;)
     public String addBidForm(BidList bid) {
-<span class="fc" id="L61">        logger.info(&quot;Affichage du formulaire d'ajout d'un BidList&quot;);</span>
-<span class="fc" id="L62">        return &quot;bidList/add&quot;;</span>
+<span class="fc" id="L56">        logger.info(&quot;Affichage du formulaire d'ajout d'un BidList&quot;);</span>
+<span class="fc" id="L57">        return &quot;bidList/add&quot;;</span>
     }
 
     /**
@@ -72,17 +67,17 @@ import jakarta.validation.Valid;
      */
     @PostMapping(&quot;/bidList/validate&quot;)
     public String validate(@Valid BidList bid, BindingResult result, RedirectAttributes redirectAttributes) {
-<span class="fc" id="L75">        logger.info(&quot;Tentative d'ajout d'un nouveau BidList&quot;);</span>
+<span class="fc" id="L70">        logger.info(&quot;Tentative d'ajout d'un nouveau BidList&quot;);</span>
 
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
-<span class="fc" id="L78">            logger.warn(&quot;Erreurs de validation : {}&quot;, result.getAllErrors());</span>
-<span class="fc" id="L79">            return &quot;bidList/add&quot;;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L73">            logger.warn(&quot;Erreurs de validation : {}&quot;, result.getAllErrors());</span>
+<span class="fc" id="L74">            return &quot;bidList/add&quot;;</span>
         }
 
-<span class="fc" id="L82">        BidList savedBid = bidListService.addBid(bid);</span>
-<span class="fc" id="L83">        redirectAttributes.addFlashAttribute(&quot;info&quot;, &quot;Ce Bid a bien été ajouté avec succès, ID : &quot; + savedBid.getBidListId());</span>
+<span class="fc" id="L77">        BidList savedBid = bidListService.addBid(bid);</span>
+<span class="fc" id="L78">        redirectAttributes.addFlashAttribute(&quot;info&quot;, &quot;Ce Bid a bien été ajouté avec succès, ID : &quot; + savedBid.getBidListId());</span>
 
-<span class="fc" id="L85">        return &quot;redirect:/bidList/list&quot;;</span>
+<span class="fc" id="L80">        return &quot;redirect:/bidList/list&quot;;</span>
     }
 
 
@@ -96,16 +91,16 @@ import jakarta.validation.Valid;
      */
     @GetMapping(&quot;/bidList/update/{id}&quot;)
     public String showUpdateForm(@PathVariable(&quot;id&quot;) Integer id, Model model) {
-<span class="fc" id="L99">        logger.info(&quot;Affichage du formulaire de mise à jour pour le BidList ID {}&quot;, id);</span>
+<span class="fc" id="L94">        logger.info(&quot;Affichage du formulaire de mise à jour pour le BidList ID {}&quot;, id);</span>
         
-<span class="fc" id="L101">        BidList bidList = bidListService.getBidById(id);</span>
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (bidList == null) {</span>
-<span class="fc" id="L103">            logger.warn(&quot;Aucun BidList trouvé avec l'ID {}&quot;, id);</span>
-<span class="fc" id="L104">            return &quot;redirect:/bidList/list&quot;;</span>
+<span class="fc" id="L96">        BidList bidList = bidListService.getBidById(id);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (bidList == null) {</span>
+<span class="fc" id="L98">            logger.warn(&quot;Aucun BidList trouvé avec l'ID {}&quot;, id);</span>
+<span class="fc" id="L99">            return &quot;redirect:/bidList/list&quot;;</span>
         }
         
-<span class="fc" id="L107">        model.addAttribute(&quot;bidList&quot;, bidList);</span>
-<span class="fc" id="L108">        return &quot;bidList/update&quot;;</span>
+<span class="fc" id="L102">        model.addAttribute(&quot;bidList&quot;, bidList);</span>
+<span class="fc" id="L103">        return &quot;bidList/update&quot;;</span>
     }
 
     /**
@@ -120,17 +115,17 @@ import jakarta.validation.Valid;
     @PostMapping(&quot;/bidList/update/{id}&quot;)
     public String updateBid(@PathVariable(&quot;id&quot;) Integer id, @Valid BidList bidList,
                             BindingResult result, Model model) {
-<span class="fc" id="L123">        logger.info(&quot;Mise à jour du BidList ID {}&quot;, id);</span>
+<span class="fc" id="L118">        logger.info(&quot;Mise à jour du BidList ID {}&quot;, id);</span>
 
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
-<span class="fc" id="L126">            logger.warn(&quot;Erreurs de validation lors de la mise à jour du BidList ID {} : {}&quot;, id, result.getAllErrors());</span>
-<span class="fc" id="L127">            model.addAttribute(&quot;bid&quot;, bidList);</span>
-<span class="fc" id="L128">            return &quot;bidList/update&quot;;</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L121">            logger.warn(&quot;Erreurs de validation lors de la mise à jour du BidList ID {} : {}&quot;, id, result.getAllErrors());</span>
+<span class="fc" id="L122">            model.addAttribute(&quot;bid&quot;, bidList);</span>
+<span class="fc" id="L123">            return &quot;bidList/update&quot;;</span>
         }
 
-<span class="fc" id="L131">        bidListService.updateBidList(id, bidList);</span>
-<span class="fc" id="L132">        logger.info(&quot;BidList ID {} mis à jour avec succès&quot;, id);</span>
-<span class="fc" id="L133">        return &quot;redirect:/bidList/list&quot;;</span>
+<span class="fc" id="L126">        bidListService.updateBidList(id, bidList);</span>
+<span class="fc" id="L127">        logger.info(&quot;BidList ID {} mis à jour avec succès&quot;, id);</span>
+<span class="fc" id="L128">        return &quot;redirect:/bidList/list&quot;;</span>
     }
 
     /**
@@ -142,11 +137,11 @@ import jakarta.validation.Valid;
      */
     @GetMapping(&quot;/bidList/delete/{id}&quot;)
     public String deleteBid(@PathVariable(&quot;id&quot;) Integer id, Model model) {
-<span class="fc" id="L145">        logger.info(&quot;Suppression du BidList ID {}&quot;, id);</span>
+<span class="fc" id="L140">        logger.info(&quot;Suppression du BidList ID {}&quot;, id);</span>
 
-<span class="fc" id="L147">        bidListService.deleteBidList(id);</span>
-<span class="fc" id="L148">        logger.info(&quot;BidList ID {} supprimé avec succès&quot;, id);</span>
-<span class="fc" id="L149">        return &quot;redirect:/bidList/list&quot;;</span>
+<span class="fc" id="L142">        bidListService.deleteBidList(id);</span>
+<span class="fc" id="L143">        logger.info(&quot;BidList ID {} supprimé avec succès&quot;, id);</span>
+<span class="fc" id="L144">        return &quot;redirect:/bidList/list&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

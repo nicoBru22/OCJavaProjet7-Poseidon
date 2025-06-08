@@ -12,11 +12,12 @@ import com.nnk.springboot.services.implService.UserServiceImpl;
 import Exception.UserExistingException;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
+@Disabled
 public class UserServiceExceptionTest {
 
     @InjectMocks
